@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: cost-eff-controller
+    tier: control-plane
+  name: cost-eff-controller
+  namespace: polaris
+spec:
+  selector:
+    matchLabels:
+      component: cost-eff-controller
+      tier: control-plane
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: cost-eff-controller
+        tier: control-plane
+    spec:
+      serviceAccountName: cost-eff-controller
+      containers:
+        - image: polarissloc/cost-eff-controller:latest
+          name: slo-controller
+          resources:
+            limits:
+              cpu: '1.0'
+              memory: 512Mi
+          env:
+            # The hostname and port of the Prometheus service:
+            - name: PROMETHEUS_HOST
+              value: prometheus-release-1-prome-prometheus.default.svc
+            - name: PROMETHEUS_PORT
+              value: '9090'
+          securityContext:
+            privileged: false

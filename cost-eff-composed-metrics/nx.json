@@ -1,8 +1,4 @@
 {
-  "npmScope": "cost-eff-composed-metrics",
-  "affected": {
-    "defaultBase": "master"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -10,6 +6,10 @@
     },
     ".eslintrc.json": "*"
   },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "cost-eff-composed-metrics",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
@@ -20,6 +20,9 @@
   },
   "projects": {
     "myslos": {
+      "tags": []
+    },
+    "cost-eff-controller": {
       "tags": []
     }
   }

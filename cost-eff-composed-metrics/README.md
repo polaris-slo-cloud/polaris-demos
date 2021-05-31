@@ -1,7 +1,6 @@
-# Cost Efficiency SLO with Raw Metrics Only.
+# Cost Efficiency SLO Demo with Composed Metrics
 
-
-This demo creates a cost efficiency SLO mapping type and controller using raw metrics queries only.
+This demo creates a cost efficiency SLO mapping type and controller using the [CostEfficiencyMetric](https://github.com/SLOCloud/SLOC/blob/master/ts/libs/mappings/common-mappings/src/lib/metrics/cost-efficiency.ts) composed metric type and the [RestApiCostEfficiencyMetricSource](https://github.com/SLOCloud/SLOC/tree/master/ts/libs/metrics/cost-efficiency/src/lib/metrics/rest-api-cost-efficiency).
 This folder contains the final result of the demo.
 To recreate it yourself, please follow the tutorial below.
 
@@ -28,9 +27,9 @@ Please make sure that you have installed the following:
 1. Create a new empty [Nx](https://nx.dev) workspace with the Polaris CLI:
 
     ```sh
-    polaris-cli init cost-eff-raw-metrics-only
+    polaris-cli init cost-eff-composed-metrics
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/390367841fcffcf3cfd1ee92cc75f07a34d2670d).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/604b84e2d362da7d36d5e7cbe3ca2c743d1926de).
 
 
 ### Create an SLO mapping type
@@ -43,13 +42,13 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
 
     ```sh
     # Navigate to our workspace's directory.
-    cd cost-eff-raw-metrics-only
+    cd cost-eff-composed-metrics
 
     # Generate the cost efficiency SLO mapping type in the library project myslos, which is publishable as @my-org/my-slos
     # This generates the project libs/myslos
     polaris-cli g slo-mapping-type cost-efficiency --project=myslos --createLibProject=true --importPath=@my-org/my-slos
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/0928c8fe2eb7c30d5d12214c02b93026a921d05a).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/053d9f21e6fc23db4eb4df0e8af491dd723e1a2f).
 
 
 1. Launch your favorite IDE or editor and open the file `libs/my-slos/src/lib/slo-mappings/cost-efficiency.slo-mapping.ts`, which contains three types:
@@ -69,7 +68,7 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
                 group: 'slo.sloc.github.io', // Our API group.
             ...
         ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/d9294937b893b8df9fbf97c687a06b297facffda).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/8917cc631ed99de585332137acc6370254c43e19).
 
 
 1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our SLO mapping type and associate it with the SLO mapping type class in [transformation service](https://github.com/SLOCloud/SLOC/blob/master/ts/libs/core/src/lib/transformation/public/service/polaris-transformation-service.ts) of the Polaris runtime.
@@ -96,7 +95,15 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     # Generate an SLO controller project for the CostEfficiencySloMapping in apps/cost-eff-controller
     polaris-cli g slo-controller cost-eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=CostEfficiencySloMapping
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/f74aee944222bb23dd3f0f5bc171e3925a061860).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/f446fac7d517ffcc3c3afad64f995874de97e8da).
+
+
+1. Since we want to use the `CostEfficiencyMetric` and the `RestApiCostEfficiencyMetricSource` provided by the `@polaris-sloc/common-mappings` package, we install this package as a dependency.
+
+    ```sh
+    npm install --save @polaris-sloc/cost-efficiency
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/49d910a704a282637dfde7e8ac215985b4878fe2).
 
 
 1. The generated SLO controller project includes the following:
@@ -106,8 +113,17 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
 
 
+1. To allow us to use the composed metrics from the `@polaris-sloc/cost-efficiency` library, we need to initialize this library in `apps/cost-eff-controller/src/main.ts` just before creating the control loop.
+
+    ```TypeScript
+    // Initialize composed metrics libraries
+    initCostEfficiencyMetrics(polarisRuntime);
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/8111782cefb6c4f2f3d2ff3f93422dce31e23901).
+
+
 1. Next, we implement the `CostEfficiencySlo` in `apps/cost-eff-controller/src/app/slo/cost-efficiency.slo.ts` as shown in the commit diff.
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/98e45f0a981a054c30f4ded73d2f88d4a0eede22).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/74e203e315a4283268c75883776cf65e60fd518d).
 
 
 

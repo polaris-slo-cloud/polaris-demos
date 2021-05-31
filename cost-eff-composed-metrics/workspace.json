@@ -1,9 +1,39 @@
 {
-  
-  
   "version": 2,
-  
-  "projects": {},
+  "projects": {
+    "myslos": {
+      "root": "libs/myslos",
+      "sourceRoot": "libs/myslos/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/myslos/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/myslos"],
+          "options": {
+            "jestConfig": "libs/myslos/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/myslos",
+            "tsConfig": "libs/myslos/tsconfig.lib.json",
+            "packageJson": "libs/myslos/package.json",
+            "main": "libs/myslos/src/index.ts",
+            "assets": ["libs/myslos/*.md"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }

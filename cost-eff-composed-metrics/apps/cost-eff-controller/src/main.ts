@@ -4,6 +4,7 @@ import {
   CostEfficiencySloMappingSpec,
   initPolarisLib as initSloMappingsLib,
 } from '@my-org/my-slos';
+import { initCostEfficiencyMetrics } from '@polaris-sloc/cost-efficiency';
 import { initPolarisKubernetes } from '@polaris-sloc/kubernetes';
 import { initPrometheusQueryBackend } from '@polaris-sloc/prometheus';
 import { interval } from 'rxjs';
@@ -31,7 +32,8 @@ initPrometheusQueryBackend(
 // Initialize the used Polaris mapping libraries
 initSloMappingsLib(polarisRuntime);
 
-// ToDo: Initialize any additional libraries, e.g., composed metrics.
+// Initialize composed metrics libraries
+initCostEfficiencyMetrics(polarisRuntime);
 
 // Create an SloControlLoop and register the factories for the ServiceLevelObjectives it will handle
 const sloControlLoop = polarisRuntime.createSloControlLoop();

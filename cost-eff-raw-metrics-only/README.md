@@ -61,12 +61,12 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
         ```
     * `CostEfficiencySloMappingSpec` is the type that brings together the SLO's configuration type, its output data type (`SloOutput`), and the type of workload targets it supports (`SloTarget`).
     Depending on your use case, you may want to change the output data type of the workload target type -- for the demo, we will leave them as they are.
-    * `CostEfficiencySloMapping` is the API object that can be transformed, serialized, and sent to the orchestrator. Here, the `objectKind.group` value that is set in the constructor needs to be changed to match that of your organization. In this demo, we set it to `'slo.sloc.github.io'` to match that of the CRD, for which we already have a complete Kubernetes CRD YAML available in our [main repository](https://github.com/SLOCloud/SLOC/tree/master/go/config/crd) (the generation of CRD YAMLs from TypeScript types will be added to the Polaris CLI soon).
+    * `CostEfficiencySloMapping` is the API object that can be transformed, serialized, and sent to the orchestrator. Here, the `objectKind.group` value that is set in the constructor needs to be changed to match that of your organization. In this demo, we set it to `'slo.polaris-slo-cloud.github.io'` to match that of the CRD, for which we already have a complete Kubernetes CRD YAML available in our [main repository](https://github.com/SLOCloud/SLOC/tree/master/go/config/crd) (the generation of CRD YAMLs from TypeScript types will be added to the Polaris CLI soon).
         ```TypeScript
         constructor(initData?: SloMappingInitData<CostEfficiencySloMapping>) {
             super(initData);
             this.objectKind = new ObjectKind({
-                group: 'slo.sloc.github.io', // Our API group.
+                group: 'slo.polaris-slo-cloud.github.io', // Our API group.
             ...
         ```
     See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/d9294937b893b8df9fbf97c687a06b297facffda).

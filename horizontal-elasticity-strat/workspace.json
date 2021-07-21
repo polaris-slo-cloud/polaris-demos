@@ -1,6 +1,39 @@
 {
   "version": 2,
-  "projects": {},
+  "projects": {
+    "mystrategies": {
+      "root": "libs/mystrategies",
+      "sourceRoot": "libs/mystrategies/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/mystrategies/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/mystrategies"],
+          "options": {
+            "jestConfig": "libs/mystrategies/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/mystrategies",
+            "tsConfig": "libs/mystrategies/tsconfig.lib.json",
+            "packageJson": "libs/mystrategies/package.json",
+            "main": "libs/mystrategies/src/index.ts",
+            "assets": ["libs/mystrategies/*.md"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }

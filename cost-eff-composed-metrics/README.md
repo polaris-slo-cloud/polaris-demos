@@ -29,7 +29,7 @@ Please make sure that you have installed the following:
     ```sh
     polaris-cli init cost-eff-composed-metrics
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/604b84e2d362da7d36d5e7cbe3ca2c743d1926de).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/d9a0bbaef3995d35e4f426d8d97e010e09a39703).
 
 
 ### Create an SLO mapping type
@@ -48,7 +48,7 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
     # This generates the project libs/myslos
     polaris-cli g slo-mapping-type cost-efficiency --project=myslos --createLibProject=true --importPath=@my-org/my-slos
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/053d9f21e6fc23db4eb4df0e8af491dd723e1a2f).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/97ba7e69b7c758ed65109104d1afe52c9782e5cb).
 
 
 1. Launch your favorite IDE or editor and open the file `libs/my-slos/src/lib/slo-mappings/cost-efficiency.slo-mapping.ts`, which contains three types:
@@ -68,7 +68,7 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
                 group: 'slo.polaris-slo-cloud.github.io', // Our API group.
             ...
         ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/8917cc631ed99de585332137acc6370254c43e19).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/6d01babaa0849b0acf53c4c54b96423acd60f772).
 
 
 1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our SLO mapping type and associate it with the SLO mapping type class in [transformation service](https://github.com/SLOCloud/SLOC/blob/master/ts/libs/core/src/lib/transformation/public/service/polaris-transformation-service.ts) of the Polaris runtime.
@@ -95,7 +95,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     # Generate an SLO controller project for the CostEfficiencySloMapping in apps/cost-eff-controller
     polaris-cli g slo-controller cost-eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=CostEfficiencySloMapping
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/f446fac7d517ffcc3c3afad64f995874de97e8da).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/863854e2d9abe8ae7b0ac5c561b7ebecdd01c4a6).
 
 
 1. Since we want to use the `CostEfficiencyMetric` and the `RestApiCostEfficiencyMetricSource` provided by the `@polaris-sloc/common-mappings` package, we install this package as a dependency.
@@ -103,7 +103,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     ```sh
     npm install --save @polaris-sloc/cost-efficiency
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/49d910a704a282637dfde7e8ac215985b4878fe2).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/4b38f63f8ea1f69149014529fc8ce8174ed6c2d4).
 
 
 1. The generated SLO controller project includes the following:
@@ -119,11 +119,11 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     // Initialize composed metrics libraries
     initCostEfficiencyMetrics(polarisRuntime);
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/8111782cefb6c4f2f3d2ff3f93422dce31e23901).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/7d83d0877a11417f29a2a7e0fe7a63a8e4bcc7e3).
 
 
 1. Next, we implement the `CostEfficiencySlo` in `apps/cost-eff-controller/src/app/slo/cost-efficiency.slo.ts` as shown in the commit diff.
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/74e203e315a4283268c75883776cf65e60fd518d).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/b3df0167299617920e6edfcfa6fdadc0a3a2f64d).
 
 
 

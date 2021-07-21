@@ -17,7 +17,7 @@ metadata:
 rules:
   # Allow reading all SLO mappings
   # - apiGroups:
-  #   - slo.sloc.github.io
+  #   - slo.polaris-slo-cloud.github.io
   #   resources:
   #   - "*"
   #   verbs:
@@ -27,7 +27,7 @@ rules:
 
   # Allow reading supported SLO mappings
   - apiGroups:
-      - slo.sloc.github.io
+      - slo.polaris-slo-cloud.github.io
     resources:
       - costefficiencyslomappings
     verbs:
@@ -35,7 +35,7 @@ rules:
       - watch
       - list
   - apiGroups:
-      - slo.sloc.github.io
+      - slo.polaris-slo-cloud.github.io
     resources:
       - costefficiencyslomappings/status
     verbs:
@@ -43,7 +43,7 @@ rules:
 
   # Allow writing all elasticity strategies
   - apiGroups:
-      - elasticity.sloc.github.io
+      - elasticity.polaris-slo-cloud.github.io
     resources:
       - '*'
     verbs:

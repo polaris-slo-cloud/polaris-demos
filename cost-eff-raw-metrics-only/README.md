@@ -61,15 +61,15 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
         ```
     * `CostEfficiencySloMappingSpec` is the type that brings together the SLO's configuration type, its output data type (`SloOutput`), and the type of workload targets it supports (`SloTarget`).
     Depending on your use case, you may want to change the output data type of the workload target type -- for the demo, we will leave them as they are.
-    * `CostEfficiencySloMapping` is the API object that can be transformed, serialized, and sent to the orchestrator. Here, the `objectKind.group` value that is set in the constructor needs to be changed to match that of your organization. In this demo, we set it to `'slo.sloc.github.io'` to match that of the CRD, for which we already have a complete Kubernetes CRD YAML available in our [main repository](https://github.com/SLOCloud/SLOC/tree/master/go/config/crd) (the generation of CRD YAMLs from TypeScript types will be added to the Polaris CLI soon).
+    * `CostEfficiencySloMapping` is the API object that can be transformed, serialized, and sent to the orchestrator. Here, the `objectKind.group` value that is set in the constructor needs to be changed to match that of your organization. In this demo, we set it to `'slo.polaris-slo-cloud.github.io'` to match that of the CRD, for which we already have a complete Kubernetes CRD YAML available in our [main repository](https://github.com/SLOCloud/SLOC/tree/master/go/config/crd) (the generation of CRD YAMLs from TypeScript types will be added to the Polaris CLI soon).
         ```TypeScript
         constructor(initData?: SloMappingInitData<CostEfficiencySloMapping>) {
             super(initData);
             this.objectKind = new ObjectKind({
-                group: 'slo.sloc.github.io', // Our API group.
+                group: 'slo.polaris-slo-cloud.github.io', // Our API group.
             ...
         ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/d9294937b893b8df9fbf97c687a06b297facffda).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/bbcf25eb2a20c06e477915b9fe31ed7ac8de2b96).
 
 
 1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our SLO mapping type and associate it with the SLO mapping type class in [transformation service](https://github.com/SLOCloud/SLOC/blob/master/ts/libs/core/src/lib/transformation/public/service/polaris-transformation-service.ts) of the Polaris runtime.
@@ -96,7 +96,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
     # Generate an SLO controller project for the CostEfficiencySloMapping in apps/cost-eff-controller
     polaris-cli g slo-controller cost-eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=CostEfficiencySloMapping
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/f74aee944222bb23dd3f0f5bc171e3925a061860).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/27b3efc20eb0023f75d0a137b9b7503e0dcd9a3d).
 
 
 1. The generated SLO controller project includes the following:
@@ -107,7 +107,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and
 
 
 1. Next, we implement the `CostEfficiencySlo` in `apps/cost-eff-controller/src/app/slo/cost-efficiency.slo.ts` as shown in the commit diff.
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/98e45f0a981a054c30f4ded73d2f88d4a0eede22).
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/5cd0eb58ada21b186e8b1455c7fb8860414af18b).
 
 
 

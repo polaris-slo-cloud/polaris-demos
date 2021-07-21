@@ -1,94 +1,205 @@
+# Horizontal Elasticity Strategy Controller Demo
+
+This demo creates a horizontal elasticity strategy type and controller.
+This folder contains the final result of the demo.
+To recreate it yourself, please follow the tutorial below.
 
 
-# HorizontalElasticityStrat
+## Prerequisites
 
-This project was generated using [Nx](https://nx.dev).
+Please make sure that you have installed the following:
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+* Node.JS 14 or higher
+* kubectl (and configure the Kubernetes cluster you want to use for testing as your current context)
+* [Polaris CLI](https://www.npmjs.com/package/@polaris-sloc/cli): to install Polaris CLI, run the following command:
 
-🔎 **Smart, Extensible Build Framework**
-
-## Adding capabilities to your workspace
-
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
-
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
-
-Below are our core plugins:
-
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
-
-There are also many [community plugins](https://nx.dev/community) you could add.
-
-## Generate an application
-
-Run `nx g @nrwl/react:app my-app` to generate an application.
-
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@horizontal-elasticity-strat/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+    ```
+    npm install -g @polaris-sloc/cli
+    ```
 
 
+## Tutorial
 
-## ☁ Nx Cloud
+### Create a new workspace with the Polaris CLI
 
-### Distributed Computation Caching & Distributed Task Execution
+1. Open a terminal, where you would like to create your workspace.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+1. Create a new empty [Nx](https://nx.dev) workspace with the Polaris CLI:
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+    ```sh
+    polaris-cli init horizontal-elasticity-strat
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/bb1e48600cb835cc0ee3feda5efe3fffb3d9a3b3).
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+### Create an Elasticity Strategy type
+
+1. Go into the workspace's directory and create an elasticity strategy type for the horizontal elasticity strategy.
+An elasticity strategy type needs to be contained within a publishable Node.JS library project (i.e., an Nx project that builds a publishable npm package).
+The name of the project is specified with the `--project` parameter.
+If you don't have any library project in the workspace yet (as is the case in this demo), Polaris CLI can create one.
+To this end, add the `--createLibProject=true` parameter and specify the import path that people using the library will use for importing it using the `--importPath` parameter.
+
+    ```sh
+    # Navigate to our workspace's directory.
+    cd horizontal-elasticity-strat
+
+    # Generate the Horizontal Elasticity Strategy type in the library project mystrategies, which is publishable as @my-org/my-strategies
+    # This generates the project libs/mystrategies
+    polaris-cli g elasticity-strategy horizontal-elasticity-strategy --project=mystrategies --createLibProject=true --importPath=@my-org/my-strategies
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/17e372b463517236f0cb4051e1087028a0a06351).
+
+
+1. Launch your favorite IDE or editor and open the file `libs/mystrategies/src/lib/elasticity/horizontal-elasticity-strategy.ts`.
+It contains a list of ToDos and contains three types:
+
+    * `HorizontalElasticityStrategyConfig` models the configuration options of the elasticity strategy. Add the following properties here:
+
+        ```TypeScript
+        /**
+         * The minimum number of replicas that the target workload must have.
+         */
+        minReplicas?: number;
+
+        /**
+         * The maximum number of replicas that the target workload must have.
+         */
+        maxReplicas?: number;
+        ```
+
+    * `HorizontalElasticityStrategyKind` can be used in an SLO mapping to reference this type of elasticity strategy.
+    It also defines the input data type of the elasticity strategy (`SloCompliance`), which has to match the output data type of the SLO(s) that you want to use the elasticity strategy with, and the type of workload targets it supports (`SloTarget`).
+    Depending on your use case, you may want to change the output data type of the workload target type -- for the demo, we will leave them as they are.
+    Since this class defines the `ObjectKind` of the elasticity strategy, you need to adapt the `group` value that is set in the constructor to match that of your organization.
+    In this demo, we leave it as it is, `'elasticity.polaris-slo-cloud.github.io'`, to match that of the CRD, for which we already have a complete Kubernetes CRD YAML available in our [main repository](https://github.com/SLOCloud/SLOC/tree/master/go/config/crd) (the generation of CRD YAMLs from TypeScript types will be added to the Polaris CLI soon).
+
+        ```TypeScript
+        constructor() {
+            super({
+                group: 'elasticity.polaris-slo-cloud.github.io',
+                version: 'v1',
+                kind: 'HorizontalElasticityStrategy',
+            });
+        }
+        ```
+
+    * `HorizontalElasticityStrategy` is the API object that can be transformed, serialized, and sent to the orchestrator.
+    It takes three generic type parameters: i) the elasticity strategy's input data type, ii) the supported workload type, and iii) the data type that defines the strategy's configuration.
+    The first two must match those of `HorizontalElasticityStrategyKind` and the third one refers to the `HorizontalElasticityStrategyConfig` interface that was generated.
+
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/51ef0d5b19dc5dd14ba086aab7837fc954aca1da).
+
+
+1. The file `libs/mystrategies/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our elasticity strategy and associate it with the elasticity strategy class in [transformation service](https://github.com/SLOCloud/SLOC/blob/master/ts/libs/core/src/lib/transformation/public/service/polaris-transformation-service.ts) of the Polaris runtime.
+Since we generated a new library project, this step has already been done by the Polaris CLI.
+If we had added the SLO mapping type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
+
+    ```TypeScript
+    export function initPolarisLib(polarisRuntime: PolarisRuntime): void {
+        ...
+        polarisRuntime.transformer.registerObjectKind(new HorizontalElasticityStrategy().objectKind, HorizontalElasticityStrategy);
+    }
+    ```
+
+
+
+### Create the Elasticity Strategy Controller
+
+1. To generate an elasticity strategy controller, we need to tell the Polaris CLI which elasticity strategy type is going to be handled by the controller.
+This is done using the `--eStratTypePkg` and the `--eStratType` arguments.
+If the elasticity strategy type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the elasticity strategy type is available locally, otherwise, it installs the respective npm package.
+Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` package to enable the controller for use in Kubernetes.
+
+    ```sh
+    # Generate an elasticity strategy controller project for the HorizontalElasticityStrategy in apps/horizontal-elasticity-strat-controller
+    polaris-cli g elasticity-strategy-controller horizontal-elasticity-strat-controller --eStratTypePkg=@my-org/my-strategies --eStratType=HorizontalElasticityStrategy
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/dce9a6b990d2a82f15315579c069e374e05d5fc6).
+
+
+1. The generated elasticity strategy controller project includes the following:
+
+    * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, initializing the `@my-org/my-strategies` library, registering the `HorizontalElasticityStrategyKind` with the elasticity strategy manager, linking it to the newly generated `HorizontalElasticityStrategyController`, and starting the watch on the horizontal elasticity strategies on the orchestrator.
+    * `src/app/elasticity/horizontal-elasticity-strategy-controller.ts` contains the `HorizontalElasticityStrategyController` class that will act as the microcontroller for enacting the elasticity strategy.
+    A single instance of this microcontroller class is created to handle all elasticity strategy instances.
+    Note the difference to SLO controllers, where a distinct microcontroller instance is created for each SLO mapping instance.
+    This is because each SLO mapping contains a distinct configuration and the SLO with that specific configuration needs to evaluated periodically.
+    Instead an elasticity strategy is only executed when an elasticity strategy type instance is created or modified and that instance contains all the information needed to execute the strategy.
+    * `Dockerfile` for building a container image of the controller
+    * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
+
+
+1. The file with the `HorizontalElasticityStrategyController` class contains a list of ToDos that need to be covered.
+
+    * If the generic parameters of the elasticity strategy kind were changed from the defaults, they need to be adapted here as well - in this case, no changes are necessary.
+    * If the elasticity strategy uses an input type other than `SloCompliance`, we need to change the controller's superclass to `ElasticityStrategyController` (more on this shortly).
+    * The elasticity strategy's actions need to be implemented in the `execute()` method.
+    * The `manifests/1-rbac.yaml` file needs to be adapted to grant permissions on the API group and kind of the elasticity strategy kind. If the default API group (`elasticity.polaris-slo-cloud.github.io`) and kind were not changed in the elasticity strategy type (we didn't change them in the demo), nothing needs to be done here.
+
+    The generated code creates an `OrchestratorClient` for interaction with the orchestrator and a `StabilizationWindowTracker` that can be used to ensure that we don't execute an elasticity strategy twice for the same target in a short time window, where the effect of the last operation cannot be seen yet (i.e., the stabilization window).
+    All framework classes and methods have JSDoc applied, so hovering over a method name will reveal its documentation or that of the method in the superclass or interface.
+
+    An [elasticity strategy controller](https://github.com/polaris-slo-cloud/polaris/blob/master/ts/libs/core/src/lib/elasticity/public/common/elasticity-strategy-controller.ts) must implement two main methods:
+
+    * `checkIfActionNeeded()` checks if the specified elasticity strategy instance requires an execution of the strategy's actions.
+    E.g., if the value of `SloCompliance` is within the toleration interval, no action is needed.
+    When using `SloCompliance` as input (and thus the `SloComplianceElasticityStrategyControllerBase` superclass), this method does not need to be implemented, because it is handled by the superclass.
+    * `execute()` performs the actions that constitute the elasticity strategy, e.g., adding or removing replicas.
+
+
+
+1. If we wanted to implement a never before seen elasticity strategy, we would need to implement the `execute()` method manually.
+However, since horizontal and vertical scaling are very common, Polaris provides superclasses for each of these two elasticity strategy types (see [here](https://github.com/polaris-slo-cloud/polaris/tree/master/ts/libs/core/src/lib/elasticity/public/control/base)).
+Thus, we can delete most of the boilerplate code and extend the `HorizontalElasticityStrategyControllerBase`, which requires us to only compute the new number of replicas:
+
+    ```TypeScript
+    protected computeScale(
+        elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, HorizontalElasticityStrategyConfig>,
+        currScale: Scale,
+    ): Promise<Scale> {
+        const newScale = new Scale(currScale);
+        const multiplier = elasticityStrategy.spec.sloOutputParams.currSloCompliancePercentage / 100;
+        newScale.spec.replicas = Math.ceil(currScale.spec.replicas * multiplier);
+        return Promise.resolve(newScale);
+    }
+    ```
+    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/5ed51559c6b26ebaa034b3453542e3f14592d2a0).
+
+
+
+### Building and deploying the Elasticity Strategy controller
+
+1. Since Polaris CLI has generated a Dockerfile for us, we can easily build and push the container image for our elasticity strategy controller.
+The tags for the image can be adjusted in the build command in `workspace.json` `projects.horizontal-elasticity-strat-controller.docker-build.options.commands` (the user friendliness of this step will be improved in the future).
+When changing the tag here, you also need to change the image name in `apps/horizontal-elasticity-strat-controller/manifests/kubernetes/2-slo-controller.yaml`
+
+    ```JSON
+    "commands": [
+        "docker build ... -t polarissloc/horizontal-elasticity-strat-controller:latest ."
+    ],
+    ```
+
+    ```sh
+    # Build SLO controller container image
+    polaris-cli docker-build horizontal-elasticity-strat-controller
+
+    # Push the container image to Dockerhub
+    docker push polarissloc/horizontal-elasticity-strat-controller:latest
+    ```
+
+
+1. Ensure that you have installed the appropriate CRDs for the SLO (this will be improved once Polaris CLI can generate CRDs from TypeScript).
+    1. Clone the main [Polaris repository](https://github.com/SLOCloud/SLOC).
+    2. Open a terminal and run `kubectl apply -k ./go/config/crd`
+
+
+1. Deploy the elasticity strategy controller using Polaris CLI.
+
+    ```sh
+    # Deploy the controller
+    polaris-cli deploy horizontal-elasticity-strat-controller
+
+    # Verify that the deployment worked
+    kubectl get deployments.apps -n polaris
+    ```

@@ -8,3 +8,4 @@ The repository contains the following demos:
 
 * [cost-eff-composed-metrics](./cost-eff-composed-metrics): Implements a cost efficiency SLO mapping type and controller using composed metrics from the `@polaris-sloc/cost-efficiency` library.
 * [cost-eff-raw-metrics-only](./cost-eff-raw-metrics-only): Implements a cost efficiency SLO mapping type and controller using only raw metrics queries in the controller directly.
+* [horizontal-elasticity-strat](./horizontal-elasticity-strat): Implements a horizontal elasticity strategy type and controller.

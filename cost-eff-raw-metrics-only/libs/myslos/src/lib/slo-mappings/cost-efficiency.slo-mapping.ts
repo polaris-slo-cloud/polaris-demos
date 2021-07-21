@@ -13,7 +13,11 @@ import {
  * Represents the configuration options of the CostEfficiency SLO.
  */
 export interface CostEfficiencySloConfig {
-  // ToDo: Add SLO configuration properties.
+  responseTimeThresholdMs: 10 | 25 | 50 | 100 | 250 | 500 | 1000 | 2500 | 5000 | 10000;
+
+  targetCostEfficiency: number;
+
+  minRequestsPercentile?: number;
 }
 
 /**
@@ -38,7 +42,7 @@ export class CostEfficiencySloMapping extends SloMappingBase<CostEfficiencySloMa
   constructor(initData?: SloMappingInitData<CostEfficiencySloMapping>) {
     super(initData);
     this.objectKind = new ObjectKind({
-      group: 'slo.example.github.io', // ToDo: Replace the group with your own.
+      group: 'slo.polaris-slo-cloud.github.io',
       version: 'v1',
       kind: 'CostEfficiencySloMapping',
     });

@@ -1,0 +1,23 @@
+{
+  "name": "efficieny-demo",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test"
+  },
+  "private": true,
+  "devDependencies": {
+    "@nrwl/cli": "13.4.5",
+    "@nrwl/tao": "13.4.5",
+    "@nrwl/workspace": "13.4.5",
+    "@polaris-sloc/polaris-nx": "^0.2.0-beta.22",
+    "@types/node": "14.14.33",
+    "prettier": "^2.3.1",
+    "typescript": "~4.4.3"
+  },
+  "dependencies": {
+    "@polaris-sloc/cli": "^0.2.0-beta.22"
+  }
+}

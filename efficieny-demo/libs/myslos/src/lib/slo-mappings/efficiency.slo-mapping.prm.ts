@@ -13,7 +13,15 @@ import {
  * Represents the configuration options of the Efficiency SLO.
  */
 export interface EfficiencySloConfig {
-  // ToDo: Add SLO configuration properties.
+
+  /**
+   * The desired target efficiency in the range between 0 and 100.
+   *
+   * @minimum 0
+   * @maximum 100
+   */
+  targetEfficiency: number;
+
 }
 
 /**
@@ -38,7 +46,7 @@ export class EfficiencySloMapping extends SloMappingBase<EfficiencySloMappingSpe
   constructor(initData?: SloMappingInitData<EfficiencySloMapping>) {
     super(initData);
     this.objectKind = new ObjectKind({
-      group: 'slo.example.github.io', // ToDo: Replace the group with your own.
+      group: 'slo.example.github.io',
       version: 'v1',
       kind: 'EfficiencySloMapping',
     });

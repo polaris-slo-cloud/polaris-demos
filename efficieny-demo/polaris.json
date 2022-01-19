@@ -10,6 +10,10 @@
         "outDir": "libs/myslos/crds",
         "polarisTypes": ["EfficiencySloMapping", "EfficiencyMetricMapping"]
       }
+    },
+    "eff-controller": {
+      "projectType": "slo-controller",
+      "tsEntryPoint": "apps/eff-controller/src/main.ts"
     }
   }
 }

@@ -4,6 +4,7 @@ import {
   EfficiencySloMappingSpec,
   initPolarisLib as initSloMappingsLib,
 } from '@my-org/my-slos';
+import { Logger } from '@polaris-sloc/core';
 import { initPolarisKubernetes } from '@polaris-sloc/kubernetes';
 import { initPrometheusQueryBackend } from '@polaris-sloc/prometheus';
 import { interval } from 'rxjs';
@@ -30,8 +31,6 @@ initPrometheusQueryBackend(
 
 // Initialize the used Polaris mapping libraries
 initSloMappingsLib(polarisRuntime);
-
-// ToDo: Initialize any additional libraries, e.g., composed metrics.
 
 // Create an SloControlLoop and register the factories for the ServiceLevelObjectives it will handle
 const sloControlLoop = polarisRuntime.createSloControlLoop();

@@ -46,7 +46,7 @@ export class EfficiencySloMapping extends SloMappingBase<EfficiencySloMappingSpe
   constructor(initData?: SloMappingInitData<EfficiencySloMapping>) {
     super(initData);
     this.objectKind = new ObjectKind({
-      group: 'slo.example.github.io',
+      group: 'slo.polaris-slo-cloud.github.io',
       version: 'v1',
       kind: 'EfficiencySloMapping',
     });

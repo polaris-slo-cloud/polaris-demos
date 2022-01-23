@@ -1,5 +1,5 @@
 kind: EfficiencySloMapping
-apiVersion: slo.example.github.io/v1
+apiVersion: slo.polaris-slo-cloud.github.io/v1
 metadata:
   namespace: demo
   name: demo-pause-efficiency

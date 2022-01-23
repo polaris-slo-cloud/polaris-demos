@@ -1,0 +1,15 @@
+kind: EfficiencySloMapping
+apiVersion: slo.example.github.io/v1
+metadata:
+  namespace: demo
+  name: demo-pause-efficiency
+spec:
+  targetRef:
+    kind: Deployment
+    name: pause-deployment
+    apiVersion: apps/v1
+  elasticityStrategy:
+    kind: HorizontalElasticityStrategy
+    apiVersion: apps/v1
+  sloConfig:
+    targetEfficiency: 30

@@ -13,6 +13,7 @@
     "@nrwl/eslint-plugin-nx": "13.4.5",
     "@nrwl/jest": "13.4.5",
     "@nrwl/linter": "13.4.5",
+    "@nrwl/node": "13.4.5",
     "@nrwl/tao": "13.4.5",
     "@nrwl/workspace": "13.4.5",
     "@polaris-sloc/polaris-nx": "^0.2.0-beta.22",
@@ -33,6 +34,8 @@
     "@polaris-sloc/cli": "^0.2.0-beta.22",
     "@polaris-sloc/common-mappings": "0.2.0-beta.22",
     "@polaris-sloc/core": "0.2.0-beta.22",
+    "@polaris-sloc/kubernetes": "0.2.0-beta.22",
+    "@polaris-sloc/prometheus": "0.2.0-beta.22",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0"
   }

@@ -1,7 +1,7 @@
 import { Efficiency, EfficiencyMetric, EfficiencyParams, EfficiencySloConfig } from '@my-org/my-slos';
 import {
   ComposedMetricSource,
-  createOwnerReference,
+  createOwnerReference, Logger,
   MetricsSource,
   ObservableOrPromise,
   OrchestratorGateway,
@@ -53,6 +53,10 @@ export class EfficiencySlo
 
   private async calculateSloCompliance(): Promise<number> {
     const eff = await this.effMetricSource.getCurrentValue().toPromise();
+    if (!eff) {
+      Logger.log('Obtaining efficiency metric returned:', eff);
+      return 100;
+    }
     const compliance = (this.sloMapping.spec.sloConfig.targetEfficiency / eff.value.efficiency) * 100
     return Math.ceil(compliance);
   }

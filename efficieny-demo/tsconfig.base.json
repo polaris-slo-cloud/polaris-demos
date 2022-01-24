@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@my-org/my-slos": ["libs/myslos/src/index.ts"]
+      "@my-org/my-slos": ["libs/myslos/src/index.ts"],
+      "@my-org/my-strategies": ["libs/mystrategies/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

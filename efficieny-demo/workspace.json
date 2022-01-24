@@ -3,6 +3,7 @@
   "projects": {
     "eff-controller": "apps/eff-controller",
     "myslos": "libs/myslos",
+    "mystrategies": "libs/mystrategies",
     "predicted-efficiency": "apps/predicted-efficiency"
   }
 }

@@ -14,6 +14,10 @@
     "eff-controller": {
       "projectType": "slo-controller",
       "tsEntryPoint": "apps/eff-controller/src/main.ts"
+    },
+    "predicted-efficiency": {
+      "projectType": "composed-metric-controller",
+      "tsEntryPoint": "apps/predicted-efficiency/src/main.ts"
     }
   }
 }

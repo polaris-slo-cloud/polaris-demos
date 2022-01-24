@@ -36,7 +36,7 @@ spec:
           operator: Exists
           effect: NoSchedule
       containers:
-        - image: polarissloc/predicted-efficiency-composed-metric-controller:latest
+        - image: polarissloc/predicted-efficiency-composed-metric-controller:1.0
           name: metrics-controller
           resources:
             limits:
@@ -62,7 +62,7 @@ spec:
               value: kubernetes.default.svc
             - name: AI_PROXY_BASE_URL
               value: 'http://0.0.0.0:5000'
-        - image: polarissloc/predicted-efficiency-ai-proxy:latest
+        - image: polarissloc/predicted-efficiency-ai-proxy:1.0
           name: ai-proxy
           ports:
             - name: port
@@ -74,7 +74,7 @@ spec:
               value: '9090'
             - name: TFSERVING_URL
               # TODO modify this to point to your Tensorflow Serving Service (or the selected Inference Service)
-              value: tfserving.default.svc
+              value: 'http://cost-efficiency-serving-service:8500/v1/models/cost-efficiency:predict'
 ---
 apiVersion: v1
 kind: Service

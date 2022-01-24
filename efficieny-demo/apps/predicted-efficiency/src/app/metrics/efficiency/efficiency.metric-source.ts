@@ -47,7 +47,7 @@ export class EfficiencyMetricSource extends ComposedMetricSourceBase<Efficiency>
 }
 
 interface PredictionApiResponse {
-  // ToDo
+  predictions: number[][];
 }
 
 async function callPrediction(
@@ -68,5 +68,11 @@ async function callPrediction(
 function mapResponseToSample(
   response: PredictionApiResponse
 ): Sample<Efficiency> {
-  // ToDo
+  console.log(response);
+  return {
+    timestamp: Math.floor(Date.now() / 1000),
+    value: {
+      efficiency: response.predictions[0][0],
+    },
+  };
 }

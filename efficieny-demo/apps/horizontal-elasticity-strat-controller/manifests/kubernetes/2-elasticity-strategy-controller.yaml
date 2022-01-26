@@ -35,7 +35,7 @@ spec:
           operator: Exists
           effect: NoSchedule
       containers:
-        - image: polarissloc/horizontal-elasticity-strat-controller:latest
+        - image: polarissloc/horizontal-elasticity-strat-controller:1.0
           name: elasticity-controller
           resources:
             limits:

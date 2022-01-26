@@ -16,7 +16,17 @@ import {
 /**
  * Configuration options for HorizontalElasticityStrategy.
  */
-export interface HorizontalElasticityStrategyConfig {}
+export interface HorizontalElasticityStrategyConfig {
+  /**
+   * The minimum number of replicas that the target workload must have.
+   */
+  minReplicas?: number;
+
+  /**
+   * The maximum number of replicas that the target workload must have.
+   */
+  maxReplicas?: number;
+}
 
 /**
  * Denotes the elasticity strategy kind for the HorizontalElasticityStrategy.

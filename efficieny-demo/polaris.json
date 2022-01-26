@@ -28,6 +28,10 @@
         "outDir": "libs/mystrategies/crds",
         "polarisTypes": ["HorizontalElasticityStrategy"]
       }
+    },
+    "horizontal-elasticity-strat-controller": {
+      "projectType": "elasticity-strategy-controller",
+      "tsEntryPoint": "apps/horizontal-elasticity-strat-controller/src/main.ts"
     }
   }
 }

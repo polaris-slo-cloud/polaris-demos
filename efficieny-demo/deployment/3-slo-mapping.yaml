@@ -13,3 +13,6 @@ spec:
     apiVersion: elasticity.polaris-slo-cloud.github.io/v1
   sloConfig:
     targetEfficiency: 30
+  stabilizationWindow:
+    scaleUpSeconds: 1
+    scaleDownSeconds: 1

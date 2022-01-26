@@ -1,7 +1,7 @@
 import {
-  DefaultStabilizationWindowTracker,
+  DefaultStabilizationWindowTracker, ElasticityStrategy, HorizontalElasticityStrategyControllerBase,
   OrchestratorClient,
-  PolarisRuntime,
+  PolarisRuntime, Scale, SloCompliance,
   SloComplianceElasticityStrategyControllerBase,
   SloTarget,
   StabilizationWindowTracker,
@@ -25,44 +25,17 @@ const EVICTION_INTERVAL_MSEC = 20 * 60 * 1000;
  *  3. Implement the `execute()` method.
  *  4. Adapt `manifests/1-rbac.yaml` to include get and update permissions on all resources that you update in the orchestrator during `execute()`.
  */
-export class HorizontalElasticityStrategyController extends SloComplianceElasticityStrategyControllerBase<
+export class HorizontalElasticityStrategyController extends HorizontalElasticityStrategyControllerBase<
   SloTarget,
   HorizontalElasticityStrategyConfig
 > {
-  /** The client for accessing orchestrator resources. */
-  private orchClient: OrchestratorClient;
-
-  /** Tracks the stabilization windows of the ElasticityStrategy instances. */
-  private stabilizationWindowTracker: StabilizationWindowTracker<HorizontalElasticityStrategy> =
-    new DefaultStabilizationWindowTracker();
-
-  private evictionInterval: NodeJS.Timeout;
-
-  constructor(polarisRuntime: PolarisRuntime) {
-    super();
-    this.orchClient = polarisRuntime.createOrchestratorClient();
-
-    this.evictionInterval = setInterval(
-      () => this.stabilizationWindowTracker.evictExpiredExecutions(),
-      EVICTION_INTERVAL_MSEC
-    );
-  }
-
-  async execute(
-    elasticityStrategy: HorizontalElasticityStrategy
-  ): Promise<void> {
-    // ToDo: Implement this method
-  }
-
-  onDestroy(): void {
-    clearInterval(this.evictionInterval);
-  }
-
-  onElasticityStrategyDeleted(
-    elasticityStrategy: HorizontalElasticityStrategy
-  ): void {
-    this.stabilizationWindowTracker.removeElasticityStrategy(
-      elasticityStrategy
-    );
+  protected computeScale(
+    elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, HorizontalElasticityStrategyConfig>,
+    currScale: Scale,
+  ): Promise<Scale> {
+    const newScale = new Scale(currScale);
+    const multiplier = elasticityStrategy.spec.sloOutputParams.currSloCompliancePercentage / 100;
+    newScale.spec.replicas = Math.ceil(currScale.spec.replicas * multiplier);
+    return Promise.resolve(newScale);
   }
 }

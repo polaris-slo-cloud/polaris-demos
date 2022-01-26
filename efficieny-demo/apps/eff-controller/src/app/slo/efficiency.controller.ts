@@ -57,7 +57,7 @@ export class EfficiencySlo
       Logger.log('Obtaining efficiency metric returned:', eff);
       return 100;
     }
-    const compliance = (this.sloMapping.spec.sloConfig.targetEfficiency / (eff.value.efficiency * 100)) * 100
+    const compliance = (this.sloMapping.spec.sloConfig.targetEfficiency / eff.value.efficiency) * 100
     return Math.ceil(compliance);
   }
 }

@@ -6,13 +6,7 @@ import {
 } from '@polaris-sloc/core';
 import { Efficiency, EfficiencyParams } from '@my-org/my-slos';
 import { Observable } from 'rxjs';
-
-// ToDo:
-// 1. Adapt the list of `supportedSloTargetTypes` in `EfficiencyMetricSourceFactory` (see efficiency.metric-source.factory.ts).
-// 2. Adapt the `EfficiencyMetricSourceFactory.metricSourceName`, if needed (e.g., if there are multiple sources for EfficiencyMetric that differ
-//    based on the supported SloTarget types).
-// 3. Implement `EfficiencyMetricSource.getValueStream()` to compute the metric.
-// 4. Adapt the `release` label in `../../../../manifests/kubernetes/3-service-monitor.yaml` to ensure that Prometheus will scrape this controller.
+import { switchMap } from 'rxjs/operators'
 
 /**
  * Computes the `Efficiency` composed metric.
@@ -27,6 +21,25 @@ export class EfficiencyMetricSource extends ComposedMetricSourceBase<Efficiency>
   }
 
   getValueStream(): Observable<Sample<Efficiency>> {
-    // ToDo
+    return this.getDefaultPollingInterval().pipe(
+      switchMap(() => this.getEfficiency()),
+    );
   }
+
+  private async getEfficiency(): Promise<Sample<Efficiency>> {
+    // We do not filter by label, because in our demo, there is only one polaris_composed_efficiency metric.
+    const effQuery = this.metricsSource.getTimeSeriesSource()
+      .select<number>('polaris_composed', 'efficiency')
+      .multiplyBy(1000);
+
+    const queryResult = await effQuery.execute();
+    if (queryResult.results?.length > 0) {
+      const result = queryResult.results[0].samples[0];
+      return {
+        timestamp: result.timestamp,
+        value: { efficiency: result.value },
+      };
+    }
+  }
+
 }

@@ -30,7 +30,7 @@ export class EfficiencyMetricSource extends ComposedMetricSourceBase<Efficiency>
     // We do not filter by label, because in our demo, there is only one polaris_composed_efficiency metric.
     const effQuery = this.metricsSource.getTimeSeriesSource()
       .select<number>('polaris_composed', 'efficiency')
-      .multiplyBy(1000);
+      .multiplyBy(100);
 
     const queryResult = await effQuery.execute();
     if (queryResult.results?.length > 0) {

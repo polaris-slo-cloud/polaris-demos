@@ -16,7 +16,7 @@
     "@nrwl/node": "13.7.2",
     "@nrwl/tao": "13.7.2",
     "@nrwl/workspace": "13.7.2",
-    "@polaris-sloc/polaris-nx": "^0.2.0-beta.28",
+    "@polaris-sloc/polaris-nx": "^0.2.0-beta.29",
     "@types/jest": "27.0.2",
     "@types/node": "14.14.33",
     "@typescript-eslint/eslint-plugin": "5.10.2",
@@ -31,11 +31,11 @@
     "typescript": "~4.5.5"
   },
   "dependencies": {
-    "@polaris-sloc/cli": "^0.2.0-beta.28",
-    "@polaris-sloc/common-mappings": "0.2.0-beta.28",
-    "@polaris-sloc/core": "0.2.0-beta.28",
-    "@polaris-sloc/kubernetes": "0.2.0-beta.28",
-    "@polaris-sloc/prometheus": "0.2.0-beta.28",
+    "@polaris-sloc/cli": "^0.2.0-beta.29",
+    "@polaris-sloc/common-mappings": "^0.2.0-beta.29",
+    "@polaris-sloc/core": "^0.2.0-beta.29",
+    "@polaris-sloc/kubernetes": "^0.2.0-beta.29",
+    "@polaris-sloc/prometheus": "^0.2.0-beta.29",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0"
   }

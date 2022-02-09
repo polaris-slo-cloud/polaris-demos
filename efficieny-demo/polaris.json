@@ -32,6 +32,10 @@
     "horizontal-elasticity-strat-controller": {
       "projectType": "elasticity-strategy-controller",
       "tsEntryPoint": "apps/horizontal-elasticity-strat-controller/src/main.ts"
+    },
+    "reactive-efficiency": {
+      "projectType": "composed-metric-controller",
+      "tsEntryPoint": "apps/reactive-efficiency/src/main.ts"
     }
   }
 }

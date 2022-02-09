@@ -12,7 +12,7 @@ import {
 export interface Efficiency {
 
   /**
-   * The current efficiency in the range between 0 and 1.
+   * The current efficiency in the range between 0 and 100.
    */
   efficiency: number;
 

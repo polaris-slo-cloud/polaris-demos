@@ -7,20 +7,20 @@ import {
 
 export default new CostEfficiencySloMapping({
   metadata: new ApiObjectMetadata({
-    namespace: 'ToDo', // ToDo: Enter the target namespace.
+    namespace: 'demo',
     name: 'demo-mapping',
   }),
   spec: new CostEfficiencySloMappingSpec({
     targetRef: new SloTarget({
-      // ToDo: Configure the target.
-      group: 'ToDo',
-      version: 'ToDo',
-      kind: 'ToDo',
-      name: 'ToDo',
+      group: 'apps',
+      version: 'v1',
+      kind: 'Deployment',
+      name: 'my-demo-deployment', // This must be an existing deployment.
     }),
-    elasticityStrategy: new HorizontalElasticityStrategyKind(), // ToDo: Change the elasticity strategy, if needed.
+    elasticityStrategy: new HorizontalElasticityStrategyKind(),
     sloConfig: {
-      // ToDo: Configure the SLO.
+      responseTimeThresholdMs: 50,
+      targetCostEfficiency: 80,
     },
   }),
 });

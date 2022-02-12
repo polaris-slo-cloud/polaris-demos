@@ -10,6 +10,10 @@
         "outDir": "libs/myslos/crds",
         "polarisTypes": ["CostEfficiencySloMapping"]
       }
+    },
+    "cost-eff-controller": {
+      "projectType": "slo-controller",
+      "tsEntryPoint": "apps/cost-eff-controller/src/main.ts"
     }
   }
 }

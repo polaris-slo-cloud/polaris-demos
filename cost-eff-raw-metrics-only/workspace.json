@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "cost-eff-controller": "apps/cost-eff-controller",
     "myslos": "libs/myslos"
   }
 }

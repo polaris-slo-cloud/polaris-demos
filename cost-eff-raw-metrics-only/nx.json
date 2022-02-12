@@ -1,4 +1,11 @@
 {
+  "npmScope": "cost-eff-raw-metrics-only",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/node"
+  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -6,10 +13,6 @@
     },
     ".eslintrc.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
-  "npmScope": "cost-eff-raw-metrics-only",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
@@ -18,12 +21,13 @@
       }
     }
   },
-  "projects": {
-    "myslos": {
-      "tags": []
-    },
-    "cost-eff-controller": {
-      "tags": []
-    }
-  }
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "defaultProject": "cost-eff-controller"
 }

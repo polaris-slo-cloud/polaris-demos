@@ -6,16 +6,19 @@ import {
   SloTarget,
 } from '@polaris-sloc/core';
 import {
-  HorizontalElasticityStrategyConfig,
+  MyHorizontalElasticityStrategyConfig,
 } from '@my-org/my-strategies';
 
 /**
- * Controller for the HorizontalElasticityStrategy.
+ * Controller for the MyHorizontalElasticityStrategy.
  */
-export class HorizontalElasticityStrategyController extends HorizontalElasticityStrategyControllerBase<SloTarget, HorizontalElasticityStrategyConfig> {
+export class MyHorizontalElasticityStrategyController extends HorizontalElasticityStrategyControllerBase<
+  SloTarget,
+  MyHorizontalElasticityStrategyConfig
+> {
 
   protected computeScale(
-    elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, HorizontalElasticityStrategyConfig>,
+    elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, MyHorizontalElasticityStrategyConfig>,
     currScale: Scale,
   ): Promise<Scale> {
     const newScale = new Scale(currScale);

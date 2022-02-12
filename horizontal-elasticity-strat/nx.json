@@ -1,7 +1,10 @@
 {
   "npmScope": "horizontal-elasticity-strat",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/node"
   },
   "implicitDependencies": {
     "package.json": {
@@ -26,12 +29,5 @@
       }
     ]
   },
-  "projects": {
-    "horizontal-elasticity-strat-controller": {
-      "tags": []
-    },
-    "mystrategies": {
-      "tags": []
-    }
-  }
+  "defaultProject": "my-horizontal-elasticity-strategy-controller"
 }

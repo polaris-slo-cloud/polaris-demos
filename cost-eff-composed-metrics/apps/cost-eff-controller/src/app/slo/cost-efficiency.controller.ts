@@ -1,9 +1,10 @@
 import { CostEfficiencySloConfig } from '@my-org/my-slos';
 import { CostEfficiencyMetric, CostEfficiencyParams } from '@polaris-sloc/common-mappings';
 import {
+  createOwnerReference,
   MetricsSource,
   ObservableOrPromise,
-  PolarisRuntime,
+  OrchestratorGateway,
   ServiceLevelObjective,
   SloCompliance,
   SloMapping,
@@ -15,8 +16,8 @@ import { of as observableOf } from 'rxjs';
  * Implements the CostEfficiency SLO.
  */
 export class CostEfficiencySlo
-  implements ServiceLevelObjective<CostEfficiencySloConfig, SloCompliance> {
-
+  implements ServiceLevelObjective<CostEfficiencySloConfig, SloCompliance>
+{
   sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>;
 
   private metricsSource: MetricsSource;
@@ -27,7 +28,7 @@ export class CostEfficiencySlo
   configure(
     sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>,
     metricsSource: MetricsSource,
-    polarisRuntime: PolarisRuntime,
+    orchestrator: OrchestratorGateway
   ): ObservableOrPromise<void> {
     this.sloMapping = sloMapping;
     this.metricsSource = metricsSource;
@@ -36,6 +37,7 @@ export class CostEfficiencySlo
       sloTarget: sloMapping.spec.targetRef,
       namespace: sloMapping.metadata.namespace,
       targetThreshold: sloMapping.spec.sloConfig.responseTimeThresholdMs,
+      owner: createOwnerReference(sloMapping),
     };
 
     if (typeof sloMapping.spec.sloConfig.minRequestsPercentile === 'number') {

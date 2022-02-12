@@ -1,1 +1,1 @@
-export * from './cost-efficiency.slo';
+export * from './cost-efficiency.controller';

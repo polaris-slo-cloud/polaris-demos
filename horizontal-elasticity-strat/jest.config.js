@@ -1,6 +1,5 @@
+const { getJestProjects } = require('@nrwl/jest');
+
 module.exports = {
-  projects: [
-    '<rootDir>/libs/mystrategies',
-    '<rootDir>/apps/horizontal-elasticity-strat-controller',
-  ],
+  projects: getJestProjects(),
 };

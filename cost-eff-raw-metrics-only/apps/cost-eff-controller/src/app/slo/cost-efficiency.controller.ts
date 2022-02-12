@@ -7,7 +7,7 @@ import {
   MetricUnavailableError,
   MetricsSource,
   ObservableOrPromise,
-  PolarisRuntime,
+  OrchestratorGateway,
   ServiceLevelObjective,
   SloCompliance,
   SloMapping,
@@ -32,7 +32,8 @@ interface RequestsFasterThanThresholdInfo {
  * Implements the CostEfficiency SLO.
  */
 export class CostEfficiencySlo
-  implements ServiceLevelObjective<CostEfficiencySloConfig, SloCompliance> {
+  implements ServiceLevelObjective<CostEfficiencySloConfig, SloCompliance>
+{
   sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>;
 
   private metricsSource: MetricsSource;
@@ -43,7 +44,7 @@ export class CostEfficiencySlo
   configure(
     sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>,
     metricsSource: MetricsSource,
-    polarisRuntime: PolarisRuntime
+    orchestrator: OrchestratorGateway
   ): ObservableOrPromise<void> {
     this.sloMapping = sloMapping;
     this.metricsSource = metricsSource;

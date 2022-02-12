@@ -10,7 +10,7 @@ ENV POLARIS_APP_NAME ${POLARIS_APP_NAME}
 # Copy package.json and similar files and download dependencies.
 # Copying only package.json files here allows us to cache the downloaded dependencies as a layer.
 COPY nx.json package.json tsconfig.base.json package-lock.json workspace.json ./
-RUN npm install --unsafe-perm
+RUN npm ci --unsafe-perm
 
 # Copy source code.
 COPY ./apps ./apps
@@ -19,7 +19,7 @@ COPY ./libs ./libs
 # Build the app.
 # It is important that "externalDependencies" is set to "none" in the node builder's options in angular.json
 # to make sure that all dependencies are packaged into the main.js file.
-RUN npx nx build ${POLARIS_APP_NAME} --with-deps=true
+RUN npx nx build ${POLARIS_APP_NAME}
 
 
 

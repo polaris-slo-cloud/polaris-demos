@@ -1,10 +1,11 @@
 import { KubeConfig } from '@kubernetes/client-node';
 import {
-  HorizontalElasticityStrategyKind,
+  MyHorizontalElasticityStrategyKind,
   initPolarisLib as initMappingsLib,
 } from '@my-org/my-strategies';
+import { Logger } from '@polaris-sloc/core';
 import { initPolarisKubernetes } from '@polaris-sloc/kubernetes';
-import { HorizontalElasticityStrategyController } from './app/elasticity';
+import { MyHorizontalElasticityStrategyController } from './app/elasticity';
 
 // Load the KubeConfig and initialize the @polaris-sloc/kubernetes library.
 const k8sConfig = new KubeConfig();
@@ -20,9 +21,14 @@ manager
   .startWatching({
     kindsToWatch: [
       {
-        kind: new HorizontalElasticityStrategyKind(),
-        controller: new HorizontalElasticityStrategyController(polarisRuntime),
+        kind: new MyHorizontalElasticityStrategyKind(),
+        controller: new MyHorizontalElasticityStrategyController(
+          polarisRuntime
+        ),
       },
     ],
   })
-  .catch((error) => void console.error(error));
+  .catch((error) => {
+    Logger.error(error);
+    process.exit(1);
+  });

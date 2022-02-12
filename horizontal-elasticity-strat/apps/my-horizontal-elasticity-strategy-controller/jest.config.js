@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'horizontal-elasticity-strat-controller',
+  displayName: 'my-horizontal-elasticity-strategy-controller',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
-    '../../coverage/apps/horizontal-elasticity-strat-controller',
+    '../../coverage/apps/my-horizontal-elasticity-strategy-controller',
 };

@@ -11,6 +11,7 @@
   "dependencies": {
     "@polaris-sloc/common-mappings": "0.2.0-beta.30",
     "@polaris-sloc/core": "0.2.0-beta.30",
+    "@polaris-sloc/cost-efficiency": "^0.2.0-beta.30",
     "@polaris-sloc/kubernetes": "0.2.0-beta.30",
     "@polaris-sloc/prometheus": "0.2.0-beta.30",
     "rxjs": "^6.6.7",

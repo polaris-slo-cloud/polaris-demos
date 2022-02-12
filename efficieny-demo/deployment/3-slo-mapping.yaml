@@ -1,0 +1,18 @@
+kind: EfficiencySloMapping
+apiVersion: slo.polaris-slo-cloud.github.io/v1
+metadata:
+  namespace: demo
+  name: demo-pause-efficiency
+spec:
+  targetRef:
+    kind: Deployment
+    name: pause-deployment
+    apiVersion: apps/v1
+  elasticityStrategy:
+    kind: HorizontalElasticityStrategy
+    apiVersion: elasticity.polaris-slo-cloud.github.io/v1
+  sloConfig:
+    targetEfficiency: 30
+  stabilizationWindow:
+    scaleUpSeconds: 1
+    scaleDownSeconds: 1

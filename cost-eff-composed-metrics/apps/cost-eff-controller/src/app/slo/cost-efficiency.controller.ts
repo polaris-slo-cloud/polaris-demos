@@ -1,5 +1,7 @@
 import { CostEfficiencySloConfig } from '@my-org/my-slos';
+import { CostEfficiencyMetric, CostEfficiencyParams } from '@polaris-sloc/common-mappings';
 import {
+  createOwnerReference,
   MetricsSource,
   ObservableOrPromise,
   OrchestratorGateway,
@@ -8,11 +10,10 @@ import {
   SloMapping,
   SloOutput,
 } from '@polaris-sloc/core';
+import { of as observableOf } from 'rxjs';
 
 /**
  * Implements the CostEfficiency SLO.
- *
- * ToDo: Change SloOutput type if necessary.
  */
 export class CostEfficiencySlo
   implements ServiceLevelObjective<CostEfficiencySloConfig, SloCompliance>
@@ -20,6 +21,9 @@ export class CostEfficiencySlo
   sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>;
 
   private metricsSource: MetricsSource;
+
+  private costEfficiencyParams: CostEfficiencyParams;
+  private minRequestsPercentile: number;
 
   configure(
     sloMapping: SloMapping<CostEfficiencySloConfig, SloCompliance>,
@@ -29,10 +33,45 @@ export class CostEfficiencySlo
     this.sloMapping = sloMapping;
     this.metricsSource = metricsSource;
 
-    // ToDo
+    this.costEfficiencyParams = {
+      sloTarget: sloMapping.spec.targetRef,
+      namespace: sloMapping.metadata.namespace,
+      targetThreshold: sloMapping.spec.sloConfig.responseTimeThresholdMs,
+      owner: createOwnerReference(sloMapping),
+    };
+
+    if (typeof sloMapping.spec.sloConfig.minRequestsPercentile === 'number') {
+      this.minRequestsPercentile = sloMapping.spec.sloConfig.minRequestsPercentile / 100;
+    } else {
+      this.minRequestsPercentile = 0.9;
+    }
+
+    return observableOf(null);
   }
 
   evaluate(): ObservableOrPromise<SloOutput<SloCompliance>> {
-    // ToDo
+    return this.calculateSloCompliance()
+      .then(sloCompliance => ({
+        sloMapping: this.sloMapping,
+        elasticityStrategyParams: {
+          currSloCompliancePercentage: sloCompliance,
+        },
+      }));
+  }
+
+  private async calculateSloCompliance(): Promise<number> {
+    const costEffMetric = this.metricsSource.getComposedMetricSource(CostEfficiencyMetric.instance, this.costEfficiencyParams);
+    const costEff = await costEffMetric.getCurrentValue().toPromise();
+
+    if (costEff.value.totalCost.currentCostPerHour === 0 || costEff.value.percentileBetterThanThreshold >= this.minRequestsPercentile) {
+      return 100;
+    }
+
+    if (costEff.value.costEfficiency === 0) {
+      return 200;
+    }
+
+    const compliance = (this.sloMapping.spec.sloConfig.targetCostEfficiency / costEff.value.costEfficiency) * 100
+    return Math.ceil(compliance);
   }
 }

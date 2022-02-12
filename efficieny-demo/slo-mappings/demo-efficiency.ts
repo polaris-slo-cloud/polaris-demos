@@ -3,7 +3,7 @@ import {
   EfficiencySloMapping,
   EfficiencySloMappingSpec,
 } from '@my-org/my-slos';
-import { HorizontalElasticityStrategyKind } from '@my-org/my-strategies';
+import { MyHorizontalElasticityStrategyKind } from '@my-org/my-strategies';
 
 export default new EfficiencySloMapping({
   metadata: new ApiObjectMetadata({
@@ -17,7 +17,7 @@ export default new EfficiencySloMapping({
       kind: 'Deployment',
       name: 'pause-deployment',
     }),
-    elasticityStrategy: new HorizontalElasticityStrategyKind(),
+    elasticityStrategy: new MyHorizontalElasticityStrategyKind(),
     sloConfig: {
       targetEfficiency: 90,
     },

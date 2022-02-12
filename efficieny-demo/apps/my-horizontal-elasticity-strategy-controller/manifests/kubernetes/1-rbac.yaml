@@ -6,14 +6,14 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: horizontal-elasticity-strat-controller
+  name: my-horizontal-elasticity-strategy-controller
   namespace: polaris
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   # ClusterRoles are not namespaced
-  name: horizontal-elasticity-strat-controller
+  name: my-horizontal-elasticity-strategy-controller
 rules:
   # Allow reading all Elasticity Strategy types
   # - apiGroups:
@@ -29,7 +29,7 @@ rules:
   - apiGroups:
       - elasticity.polaris-slo-cloud.github.io
     resources:
-      - horizontalelasticitystrategies
+      - myhorizontalelasticitystrategies
     verbs:
       - get
       - watch
@@ -37,7 +37,7 @@ rules:
   - apiGroups:
       - elasticity.polaris-slo-cloud.github.io
     resources:
-      - horizontalelasticitystrategies/status
+      - myhorizontalelasticitystrategies/status
     verbs:
       - get
 
@@ -68,12 +68,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 # Optionally, we could create a RoleBinding and to scope the permissions to a specific namespace
 metadata:
-  name: control-horizontalelasticitystrategies
+  name: control-myhorizontalelasticitystrategies
 subjects:
   - kind: ServiceAccount
-    name: horizontal-elasticity-strat-controller
+    name: my-horizontal-elasticity-strategy-controller
     namespace: polaris
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: horizontal-elasticity-strat-controller
+  name: my-horizontal-elasticity-strategy-controller

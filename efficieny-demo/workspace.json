@@ -2,7 +2,7 @@
   "version": 2,
   "projects": {
     "eff-controller": "apps/eff-controller",
-    "horizontal-elasticity-strat-controller": "apps/horizontal-elasticity-strat-controller",
+    "my-horizontal-elasticity-strategy-controller": "apps/my-horizontal-elasticity-strategy-controller",
     "myslos": "libs/myslos",
     "mystrategies": "libs/mystrategies",
     "predicted-efficiency": "apps/predicted-efficiency",

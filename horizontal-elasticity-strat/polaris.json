@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "projects": {
+    "mystrategies": {
+      "projectType": "library",
+      "tsEntryPoint": "libs/mystrategies/src/index.ts",
+      "importPath": "@my-org/my-strategies",
+      "crds": {
+        "tsConfig": "tsconfig.base.json",
+        "outDir": "libs/mystrategies/crds",
+        "polarisTypes": ["MyHorizontalElasticityStrategy"]
+      }
+    }
+  }
+}

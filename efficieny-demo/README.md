@@ -8,3 +8,4 @@ This demo is based two demo videos ([reactive scaling](https://www.youtube.com/w
 * generates a Grafana dashboard
 * creates a predicted metric controller
 
+You can find details and the commands we execute in the demos under the `docs` folder!

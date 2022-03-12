@@ -147,6 +147,18 @@ When changing the tag here, you also need to change the image name in `apps/cost
     ```
 
 
+1. If your Prometheus instance is not reachable under the DNS name `prometheus-kube-prometheus-prometheus.monitoring.svc` or on port `9090` (defaults for our [testbed setup](https://github.com/polaris-slo-cloud/polaris/tree/master/testbeds/kubernetes)), you need to change the `PROMETHEUS_HOST` and/or `PROMETHEUS_PORT` environment variables in `apps/cost-eff-controller/manifests/kubernetes/2-slo-controller.yaml`.
+
+    ```YAML
+    env:
+      # The hostname and port of the Prometheus service (adapt if necessary):
+      - name: PROMETHEUS_HOST
+        value: prometheus-kube-prometheus-prometheus.monitoring.svc
+      - name: PROMETHEUS_PORT
+        value: '9090'
+    ```
+
+
 1. Install the `CostEfficiencySloMapping` CRD that was generated earlier:
     
     ```sh

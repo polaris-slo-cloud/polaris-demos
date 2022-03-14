@@ -7,8 +7,8 @@ We recommend to follow the [Reactive Demo](Reactive-Demo.md) but **do not** depl
 
 ## Predicted Metric Controller
 ```bash
-    polaris-cli g predicted-metric-controller predicted-efficiency \
-    --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency 
+polaris-cli g predicted-metric-controller predicted-efficiency \
+  --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency 
 ```
 
 Follow the video and fill out the `efficiency-metric-source.ts`.
@@ -17,9 +17,9 @@ Take a look at this [documentation](https://github.com/polaris-slo-cloud/polaris
 Afterwards, you can build and deploy the controller:
 
 ```bash
-    polaris-cli docker-build predicted-efficiency 
-    docker push polarissloc/predicted-efficiency-ai-proxy:latest 
-    docker push polarissloc/predicted-efficiency-composed-metric-controller:latest  
+polaris-cli docker-build predicted-efficiency 
+docker push polarissloc/predicted-efficiency-ai-proxy:latest 
+docker push polarissloc/predicted-efficiency-composed-metric-controller:latest  
 ```
 
 Before deploying, you will want to update the URL of the AI Service in `apps/predicted-efficiency/manifests/kubernetes/2-metrics-controller.yaml`

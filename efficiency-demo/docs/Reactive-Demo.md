@@ -127,6 +127,5 @@ polaris-cli serialize demo-efficiency | kubectl apply -f -
 ## 7. Grafana Dashboard
 
 ```bash
-polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos \ 
-  --compMetricType=Efficiency --namespace=demo -–grafanaUrl=<grafana URL>
+polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
 ```

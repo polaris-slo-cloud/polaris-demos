@@ -42,39 +42,39 @@ kubectl apply -f ./libs/myslos/crds
 Afterwards, you can build & push the Docker container and finally deploy the components to your Kubernetes instance. 
 ```bash
 polaris-cli docker-build reactive-efficiency
-docker push …
+docker push <image-name>
 polaris-cli deploy reactive-efficiency
-kubectl get deployments.apps -n Polaris 
+kubectl get deployments.apps -n polaris
 ```
 
 ## 4. Horizontal Elasticity Strategy Controller
 
 Generate the Horizontal Elasticity Strategy:
 ```bash
-polaris-cli g elasticity-strategy my-horizontal-elasticity-strategy --project=mystrategies --createLibProject=true --importPath=@my-org/my-strategies 
+polaris-cli g elasticity-strategy my-horizontal-elasticity-strategy --project=mystrategies --createLibProject=true --importPath=@my-org/my-strategies
 ```
 
 Generate the Horizontal Elasticity Strategy controller:
 ```bash
-polaris-cli g elasticity-strategy-controller my-horizontal-elasticity-strategy-controller --eStratTypePkg=@my-org/my-strategies --eStratType=MyHorizontalElasticityStrategy 
+polaris-cli g elasticity-strategy-controller my-horizontal-elasticity-strategy-controller --eStratTypePkg=@my-org/my-strategies --eStratType=MyHorizontalElasticityStrategy
 ```
 
 Fill out controller, and generate the CRDs:
 ```bash
-polaris-cli gen-crds mystrategies 
-kubectl apply -f ./libs/mystrategies/crds 
+polaris-cli gen-crds mystrategies
+kubectl apply -f ./libs/mystrategies/crds
 ```
 
 Build, push and deploy the containers:
 ```bash
-polaris-cli docker-build my-horizontal-elasticity-strategy-controller 
-docker push … 
-polaris-cli deploy my-horizontal-elasticity-strategy-controller 
+polaris-cli docker-build my-horizontal-elasticity-strategy-controller
+docker push <image-name>
+polaris-cli deploy my-horizontal-elasticity-strategy-controller
 ```
 
 Verify that the components are running:
 ```bash
-kubectl get deployments.apps -n polaris 
+kubectl get deployments.apps -n polaris
 ```
 
 ## 5. SLO Controller
@@ -82,46 +82,46 @@ kubectl get deployments.apps -n polaris
 Generate a SLO Mapping type:
 
 ```bash
-polaris-cli g slo-mapping-type efficiency --project=myslos 
+polaris-cli g slo-mapping-type efficiency --project=myslos
 ```
 
 Fill out `SloConfig` in .ts (targetEfficiency), and generate a SLO Controller:
 
 ```bash
-polaris-cli g slo-controller eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=EfficiencySloMapping 
+polaris-cli g slo-controller eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=EfficiencySloMapping
 ```
 
 Fill out `efficiency.slo.ts` controller, and generate the CRDS:
 
 ```bash
-polaris-cli gen-crds myslos 
-kubectl apply -f ./libs/myslos/crds 
+polaris-cli gen-crds myslos
+kubectl apply -f ./libs/myslos/crds
 ```
 
 Build, push and deploy the **SLO Controller**:
 
 ```bash
-polaris-cli docker-build eff-controller 
-docker push polarissloc/eff-controller:latest 
-polaris-cli deploy eff-controller 
+polaris-cli docker-build eff-controller
+docker push <image-name>
+polaris-cli deploy eff-controller
 ```
 
 Verify that the components are running:
 ```
-kubectl get deployments.apps -n polaris 
+kubectl get deployments.apps -n polaris
 ```
  
 ## 6. SLO Mapping instance
 
 Generate a SLO Mapping instance:
 ```bash
-polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping --sloMappingTypePkg=@my-org/my-slos 
+polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping --sloMappingTypePkg=@my-org/my-slos
 ```
 
 Fill out SLO Mapping `targetEfficiency`, and serialize and apply the demo:
 
 ```bash
-polaris-cli serialize demo-efficiency | kubectl apply -f - 
+polaris-cli serialize demo-efficiency | kubectl apply -f -
 ```
 
 ## 7. Grafana Dashboard

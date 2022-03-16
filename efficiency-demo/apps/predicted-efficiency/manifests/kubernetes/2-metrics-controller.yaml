@@ -74,7 +74,7 @@ spec:
               value: '9090'
             - name: TFSERVING_URL
               # TODO modify this to point to your Tensorflow Serving Service (or the selected Inference Service)
-              value: 'http://cost-efficiency-serving-service:8500/v1/models/cost-efficiency:predict'
+              value: 'http://efficiency-serving-service:8500/v1/models/efficiency:predict'
 ---
 apiVersion: v1
 kind: Service

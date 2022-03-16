@@ -19,9 +19,9 @@ spec:
           imagePullPolicy: Always
           env:
             - name: TARGET_GVK
-              value: "apps/v1/StatefulSet"
+              value: "apps/v1/Deployment"
             - name: TARGET_NAMESPACE
-              value: "demo-mesh"
+              value: "demo"
             - name: RECONCILE_INTERVAL
               value: "5"
             - name: LOG

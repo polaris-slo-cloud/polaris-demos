@@ -121,7 +121,7 @@ polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping 
 Fill out SLO Mapping `targetEfficiency`, and serialize and apply the demo:
 
 ```bash
-polaris-cli serialize demo-efficiency | kubectl apply -f – 
+polaris-cli serialize demo-efficiency | kubectl apply -f - 
 ```
 
 ## 7. Grafana Dashboard

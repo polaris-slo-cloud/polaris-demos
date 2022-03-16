@@ -72,7 +72,7 @@ function mapResponseToSample(
   return {
     timestamp: Math.floor(Date.now() / 1000),
     value: {
-      efficiency: response.predictions[0][0],
+      efficiency: response.predictions[0][0] * 100,
     },
   };
 }

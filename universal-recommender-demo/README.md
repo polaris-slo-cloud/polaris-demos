@@ -6,10 +6,4 @@ Specifically, we have chosen [Universal Recommender](https://actionml.com/docs/h
 
 ## Prerequisites
 
-Please ensure that you have a Kubernetes cluster with Prometheus available.
-Please see our [base setup tutorial](https://github.com/polaris-slo-cloud/polaris/tree/master/testbeds/kubernetes/microk8s/base) for instructions on how to set one up - for this use case, you can skip the installation of ingress-nginx and Kubecost.
-
-
-## Setup
-
-1. 
+Please follow the instructions in the [./prerequisites](./prerequisites) directory to deploy Universal Recommender and its dependencies on your Kubernetes cluster.

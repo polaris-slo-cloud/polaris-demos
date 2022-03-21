@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: universal-recommender
+  name: harness
+  labels:
+    app: harness
+spec:
+  selector:
+    app: harness
+  type: NodePort
+  ports:
+    - name: rest-api
+      targetPort: rest-api
+      port: 9090
+      nodePort: 30904
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: universal-recommender
+  name: harness
+spec:
+  selector:
+    matchLabels:
+      app: harness
+  serviceName: harness
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: harness
+    spec:
+      containers:
+        - name: harness
+          image: actionml/harness:develop
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 3Gi
+          ports:
+            - name: rest-api
+              containerPort: 9090
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: logs
+              mountPath: /harness/logs
+          env:
+            - name: MONGO_URI
+              value: mongodb://polaris-user:polaris-password@mongodb-svc:27017/admin?ssl=false
+            - name: HARNESS_URI
+              value: http://0.0.0.0:9090
+            - name: ELASTICSEARCH_URI
+              value: http://elasticsearch-es-http:9200
+      volumes:
+        - name: logs
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: universal-recommender
+  name: universal-recommender-config
+data:
+  engine-config: |
+    {
+      "engineId": "polaris-test",
+      "engineFactory": "com.actionml.engines.ur.UREngine",
+      "sparkConf": {
+        "master": "local",
+        "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+        "spark.kryo.registrator": "org.apache.mahout.sparkbindings.io.MahoutKryoRegistrator",
+        "spark.kryo.referenceTracking": "false",
+        "spark.kryoserializer.buffer": "300m",
+        "spark.executor.memory": "3g",
+        "spark.driver.memory": "3g",
+        "spark.es.index.auto.create": "true",
+        "spark.es.nodes": "elasticsearch",
+        "spark.es.nodes.wan.only": "true"
+      },
+      "algorithm":{
+        "indicators": [
+          {
+            "name": "buy"
+          },
+          {
+            "name": "detail-page-view"
+          }
+        ]
+      }
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: universal-recommender
+  name: harness-cli
+  labels:
+    app: harness-cli
+spec:
+  containers:
+    - name: cli
+      image: actionml/harness-cli:develop
+      volumeMounts:
+        - name: config
+          mountPath: /polaris-config
+      env:
+        - name: HARNESS_SERVER_ADDRESS
+          value: harness
+  volumes:
+    - name: config
+      configMap:
+        name: universal-recommender-config
+        items:
+          - key: engine-config
+            path: engine-config.json
+---

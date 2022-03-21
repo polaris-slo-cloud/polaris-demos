@@ -1,0 +1,90 @@
+###############################################################################
+# MongoDB
+###############################################################################
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  namespace: universal-recommender
+  name: mongodb
+spec:
+  members: 1
+  type: ReplicaSet
+  version: "5.0.6"
+
+  # You can expose metrics for Prometheus polling using the
+  # `prometheus` entry.
+  prometheus:
+    # Metrics endpoint HTTP Basic Auth username
+    username: test
+
+    # Metrics endpoint HTTP Basic Auth password
+    passwordSecretRef:
+      name: metrics-endpoint-password
+
+    # Optional, defaults to `/metrics`
+    # metricsPath: /metrics
+
+    # Optional defaults to 9216
+    # port: 9216
+
+    # Prometheus endpoint can be configured to use HTTPS
+    # tlsSecretKeyRef:
+    #   name: "<kubernetes.io/tls secret name>"
+
+  security:
+    authentication:
+      modes: ["SCRAM"]
+
+  users:
+    - name: polaris-user
+      db: admin
+      passwordSecretRef:
+        name: polaris-user-password
+      roles:
+        - name: clusterAdmin
+          db: admin
+        - name: userAdminAnyDatabase
+          db: admin
+        # This is just a demo, so we give the user read and write access to all DBs.
+        - name: readWriteAnyDatabase
+          db: admin
+      scramCredentialsSecretName: my-scram
+
+  statefulSet:
+    spec:
+      # Name for the service object created by the operator
+      # serviceName: mongodb-svc
+      # selector: {}
+      # Specifies a size for the data volume different from the default 10Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+              requests:
+                storage: 5Gi
+
+# the user credentials will be generated from this secret
+# once the credentials are generated, this secret is no longer required
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: universal-recommender
+  name: polaris-user-password
+type: Opaque
+stringData:
+  password: polaris-password
+
+# Secret holding the prometheus metrics endpoint HTTP Password.
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: universal-recommender
+  name: metrics-endpoint-password
+type: Opaque
+stringData:
+  password: polaris-password
+---

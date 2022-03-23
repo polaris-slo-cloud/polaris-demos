@@ -36,7 +36,7 @@ spec:
           operator: Exists
           effect: NoSchedule
       containers:
-        - image: polarissloc/predicted-efficiency-composed-metric-controller:1.0
+        - image: polarissloc/predicted-efficiency-composed-metric-controller:1.1
           name: metrics-controller
           resources:
             limits:
@@ -62,7 +62,7 @@ spec:
               value: kubernetes.default.svc
             - name: AI_PROXY_BASE_URL
               value: 'http://0.0.0.0:5000'
-        - image: polarissloc/predicted-efficiency-ai-proxy:1.0
+        - image: polarissloc/predicted-efficiency-ai-proxy:1.1
           name: ai-proxy
           ports:
             - name: port

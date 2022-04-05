@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: load-generator-script
+  namespace: resource-consumer-demo
+data:
+  load-gen-script: |
+    #!/bin/bash
+    set -o errexit
+
+    function printUsage() {
+      echo "Usage:"
+      echo "./generate-load.sh [CPU millicores] [memory MB] [workload duration in seconds]"
+      echo "Example to consume 400 millicores and 512 MB for 60 seconds:"
+      echo "./generate-load.sh 400 512 60"
+    }
+
+    if [ "$1" == "" ] || [ "$2" == "" ] || [ "$3" == "" ]; then
+      echo "Please provide the scheduler name as the second argument."
+      printUsage
+      exit 1
+    fi
+
+    amountCpu="$1"
+    amountMem="$2"
+    durationSec="$3"
+
+    # Retrieve all resource-consumer pod IPs
+    endpoints=$(kubectl get endpoints -n $RESOURCE_CONSUMER_NAMESPACE $RESOURCE_CONSUMER_SERVICE -o jsonpath="{.subsets[*].addresses[*].ip}" )
+    if [ "$endpoints" == "" ]; then
+      echo "No endpoints found for service $RESOURCE_CONSUMER_SERVICE in namespace $RESOURCE_CONSUMER_NAMESPACE"
+      exit 1
+    fi
+
+    IFS=' ' read -a endpointsList <<< "$endpoints"
+
+    for endpoint in "${endpointsList[@]}"; do
+      cpuCmd=$(echo "curl http://${endpoint}:${RESOURCE_CONSUMER_PORT}/ConsumeCPU -d \"millicores=${amountCpu}&durationSec=${durationSec}\"")
+      echo "$cpuCmd"
+      eval "$cpuCmd"
+
+      memCmd=$(echo "curl http://${endpoint}:${RESOURCE_CONSUMER_PORT}/ConsumeMem -d \"megabytes=${amountMem}&durationSec=${durationSec}\"")
+      echo "$memCmd"
+      eval "$memCmd"
+
+      echo ""
+    done
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: load-generator
+  name: load-generator
+  namespace: resource-consumer-demo
+spec:
+  serviceAccountName: load-generator
+  containers:
+    - image: alpine:latest
+      name: cli
+      # Install curl, bash, and kubectl and then sleep for 10 days to keep the pod running.
+      # We use it only via `kubectl exec -n resource-consumer-demo load-generator -- /bin/bash`
+      command:
+        - /bin/sh
+        - -c
+        - "apk update && \
+          apk add curl bash && \
+          curl -L \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" -o /usr/local/bin/kubectl && \
+          chmod a+x /usr/local/bin/kubectl && \
+          echo \"Pod setup complete\" && \
+          sleep 10d"
+      env:
+        - name: RESOURCE_CONSUMER_NAMESPACE
+          value: resource-consumer-demo
+        - name: RESOURCE_CONSUMER_SERVICE
+          value: resource-consumer
+        - name: RESOURCE_CONSUMER_PORT
+          value: "8080"
+      volumeMounts:
+        - name: load-gen-script
+          mountPath: /load-gen
+          readOnly: false
+  volumes:
+    - name: load-gen-script
+      configMap:
+        name: load-generator-script
+        items:
+          - key: load-gen-script
+            path: generate-load.sh
+            mode: 0777

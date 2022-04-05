@@ -16,9 +16,22 @@ Then, follow these steps for deploying the resource-consumer resource efficiency
     # If any of these are not the case for you, please adapt 1-prometheus-adapter.yaml.
     helm repo update
     helm install prom-custom-metrics-adapter prometheus-community/prometheus-adapter -f ./1-prometheus-adapter.yaml
+
+    # A few minutes after the new prometheus-adapter pod is running, you can list all available custom metrics using:
+    kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1
     ```
 
-prom-custom-metrics-adapter-prometheus-adapter has been deployed.
-In a few minutes you should be able to list metrics using the following command(s):
+2. Create a [resource-consumer](https://github.com/kubernetes/kubernetes/tree/master/test/images/resource-consumer) deployment and service.
 
-  kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1
+    ```sh
+    kubectl apply -f ./2-resource-consumer.yaml
+    ```
+
+3. Deploy the load generator pod.
+
+    ```sh
+    kubectl apply -f ./3-load-generator-rbac.yaml
+    kubectl apply -f ./4-load-generator.yaml
+    ```
+
+    This pod contains the script `/load-gen/generate-load.sh`, which we use to make resource consumption requests to all resource-consumer pods (with the service, we would only hit one pod for every request due to load balancing).

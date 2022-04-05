@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: resource-consumer-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: resource-consumer
+  name: resource-consumer
+  namespace: resource-consumer-demo
+spec:
+  selector:
+    matchLabels:
+      app: resource-consumer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: resource-consumer
+    spec:
+      containers:
+        - image: gcr.io/k8s-staging-e2e-test-images/resource-consumer:1.9
+          name: resource-consumer
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resource-consumer
+  namespace: resource-consumer-demo
+spec:
+  selector:
+    app: resource-consumer
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080

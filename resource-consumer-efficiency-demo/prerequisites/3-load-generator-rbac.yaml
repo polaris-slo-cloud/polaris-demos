@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: load-generator
+  namespace: resource-consumer-demo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: load-generator-executor
+  namespace: resource-consumer-demo
+rules:
+# Allow reading Service Endpoints
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  verbs:
+  - get
+  - watch
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: load-generator
+  namespace: resource-consumer-demo
+subjects:
+  - kind: ServiceAccount
+    name: load-generator
+    namespace: resource-consumer-demo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: load-generator-executor

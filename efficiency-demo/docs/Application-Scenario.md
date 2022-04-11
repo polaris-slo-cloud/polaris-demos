@@ -24,6 +24,12 @@ The following plot depicts the Efficiency over the whole subset (the x-axis is t
 
 ![Image depicting the efficiency](figures/efficiency.png)
 
+The resource efficiency shows how efficient the system is in using the allocated resources.
+That means, an efficiency of 0% is wasting resources (i.e., allocated resources are not used), while 100% says that all allocated are used and nothing wasted.
+Intuitively the system should target 100% but this could lead to problems in terms of performance.
+The resource efficiency is not enough to identify bottlenecks caused by resource exhaustion and therefore another metric (i.e., execution latency) is necessary.
+
+The demo scaling component is not using any performance related metric but simply employs a threshold-based scaling to balance the resource efficiency to avoid wasting too much but also avoid bottleneck issues.
+
 Please note, that the demo scaling components expect values between 0 and 100, whereas the dataset is between 0 and 1.
 The reactive approach simply multiplies the number by 100, while the proactive approach multiplies the final inference result of the AI service by 100.
-

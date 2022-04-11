@@ -38,9 +38,9 @@ The reactive approach simply multiplies the number by 100, while the proactive a
 ## Polaris Load Simulator
 
 The [data-exporter application](https://github.com/polaris-slo-cloud/polaris/tree/master/python/exporters/csvreader/exporter) acts as our load simulator.
-Its purpose is to read from a `csv` file and gets scraped by Prometheus.
+Its purpose is to read from a `csv` file and being scraped by Prometheus.
 The load simulator returns per scrape one row and starts to read the file again from the beginning.
-Therefore, the application will cycle continously over the csv file that is contained in the container.
-At the moment, it only supports the [columns](https://github.com/polaris-slo-cloud/polaris/blob/master/python/exporters/csvreader/exporter/csvreader.py#L114) defined for our resource efficiency model and the csv has to be included during container build time.
+Therefore, the application will cycle continuously over the csv file that is contained in the container.
+At the moment, it only supports the [columns](https://github.com/polaris-slo-cloud/polaris/blob/master/python/exporters/csvreader/exporter/csvreader.py#L114) defined for our resource efficiency model and the csv file has to be included during container build time.
 
 During the demo application the efficiency (and its corresponding low level metrics) are repeatedly returned to Prometheus indefinitely.

@@ -6,21 +6,22 @@ import {
     POLARIS_API,
 } from '@polaris-sloc/core';
 
-// ToDo after code generation:
-// - Add properties to the ResourceEfficiency interface to store the value of a single metric instance.
-// - Add configuration parameters to the ResourceEfficiencyParams interface, if needed.
-// - (optional) Replace `POLARIS_API.METRICS_GROUP` in ResourceEfficiencyMetric.metricTypeName with a custom group name.
-//   If you change the group name, ensure that you also accordingly adapt the `1-rbac.yaml` files of all
-//   composed metric controllers and all SLO controllers that need to write this ComposedMetricType CRD.
-
 /**
  * Represents the value of a ResourceEfficiency metric.
  */
-export interface ResourceEfficiency {}
+export interface ResourceEfficiency {
+
+    /**
+     * The current efficiency in the range between 0 and 100.
+     */
+    efficiency: number;
+
+}
 
 /**
  * The parameters for retrieving the ResourceEfficiency metric.
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ResourceEfficiencyParams extends ComposedMetricParams {}
 
 /**

@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "custom-elasticity-strategies": "libs/custom-elasticity-strategies",
-    "efficiency-mappings": "libs/efficiency-mappings"
+    "efficiency-mappings": "libs/efficiency-mappings",
+    "my-horizontal-elasticity-strategy-controller": "apps/my-horizontal-elasticity-strategy-controller"
   }
 }

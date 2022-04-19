@@ -11,6 +11,7 @@
   "dependencies": {
     "@polaris-sloc/common-mappings": "0.3.0",
     "@polaris-sloc/core": "0.3.0",
+    "@polaris-sloc/kubernetes": "0.3.0",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0"
   },

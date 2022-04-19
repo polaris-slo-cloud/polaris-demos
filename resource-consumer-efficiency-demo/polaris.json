@@ -27,6 +27,10 @@
     "my-horizontal-elasticity-strategy-controller": {
       "projectType": "elasticity-strategy-controller",
       "tsEntryPoint": "apps/my-horizontal-elasticity-strategy-controller/src/main.ts"
+    },
+    "resource-efficiency-metric-controller": {
+      "projectType": "composed-metric-controller",
+      "tsEntryPoint": "apps/resource-efficiency-metric-controller/src/main.ts"
     }
   }
 }

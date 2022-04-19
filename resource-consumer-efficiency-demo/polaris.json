@@ -8,7 +8,10 @@
       "crds": {
         "tsConfig": "tsconfig.base.json",
         "outDir": "libs/efficiency-mappings/crds",
-        "polarisTypes": ["ResourceEfficiencyMetricMapping"]
+        "polarisTypes": [
+          "ResourceEfficiencyMetricMapping",
+          "ResourceEfficiencySloMapping"
+        ]
       }
     }
   }

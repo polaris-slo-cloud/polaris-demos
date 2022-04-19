@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "projects": {
+    "efficiency-mappings": {
+      "projectType": "library",
+      "tsEntryPoint": "libs/efficiency-mappings/src/index.ts",
+      "importPath": "@polaris-sloc/efficiency-mappings",
+      "crds": {
+        "tsConfig": "tsconfig.base.json",
+        "outDir": "libs/efficiency-mappings/crds",
+        "polarisTypes": ["ResourceEfficiencyMetricMapping"]
+      }
+    }
+  }
+}

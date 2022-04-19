@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@polaris-sloc/efficiency-mappings": [
+        "libs/efficiency-mappings/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

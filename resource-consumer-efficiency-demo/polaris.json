@@ -13,6 +13,16 @@
           "ResourceEfficiencySloMapping"
         ]
       }
+    },
+    "custom-elasticity-strategies": {
+      "projectType": "library",
+      "tsEntryPoint": "libs/custom-elasticity-strategies/src/index.ts",
+      "importPath": "@polaris-sloc/custom-elasticity-strategies",
+      "crds": {
+        "tsConfig": "tsconfig.base.json",
+        "outDir": "libs/custom-elasticity-strategies/crds",
+        "polarisTypes": ["MyHorizontalElasticityStrategy"]
+      }
     }
   }
 }

@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@polaris-sloc/custom-elasticity-strategies": [
+        "libs/custom-elasticity-strategies/src/index.ts"
+      ],
       "@polaris-sloc/efficiency-mappings": [
         "libs/efficiency-mappings/src/index.ts"
       ]

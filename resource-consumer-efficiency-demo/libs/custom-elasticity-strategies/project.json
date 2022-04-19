@@ -1,0 +1,25 @@
+{
+  "root": "libs/custom-elasticity-strategies",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/custom-elasticity-strategies/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/custom-elasticity-strategies"],
+      "options": {
+        "jestConfig": "libs/custom-elasticity-strategies/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "gen-crds": {
+      "executor": "@polaris-sloc/polaris-nx:generate-crds",
+      "options": {}
+    }
+  }
+}

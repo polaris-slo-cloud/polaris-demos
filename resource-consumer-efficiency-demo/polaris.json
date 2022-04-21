@@ -31,6 +31,10 @@
     "resource-efficiency-metric-controller": {
       "projectType": "composed-metric-controller",
       "tsEntryPoint": "apps/resource-efficiency-metric-controller/src/main.ts"
+    },
+    "resource-efficiency-slo-controller": {
+      "projectType": "slo-controller",
+      "tsEntryPoint": "apps/resource-efficiency-slo-controller/src/main.ts"
     }
   }
 }

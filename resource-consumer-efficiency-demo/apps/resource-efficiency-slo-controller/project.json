@@ -1,0 +1,71 @@
+{
+  "root": "apps/resource-efficiency-slo-controller",
+  "sourceRoot": "apps/resource-efficiency-slo-controller/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/resource-efficiency-slo-controller",
+        "main": "apps/resource-efficiency-slo-controller/src/main.ts",
+        "tsConfig": "apps/resource-efficiency-slo-controller/tsconfig.app.json",
+        "assets": ["apps/resource-efficiency-slo-controller/src/assets"],
+        "externalDependencies": "none"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/resource-efficiency-slo-controller/src/environments/environment.ts",
+              "with": "apps/resource-efficiency-slo-controller/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "resource-efficiency-slo-controller:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/resource-efficiency-slo-controller/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/resource-efficiency-slo-controller"],
+      "options": {
+        "jestConfig": "apps/resource-efficiency-slo-controller/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "docker-build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker build -f ./apps/resource-efficiency-slo-controller/Dockerfile --build-arg POLARIS_APP_TYPE=slo --build-arg POLARIS_APP_NAME=resource-efficiency-slo-controller -t polarissloc/resource-efficiency-slo-controller:latest ."
+        ],
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "kubectl apply -f ./apps/resource-efficiency-slo-controller/manifests/kubernetes"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

@@ -65,7 +65,7 @@ export class ResourceEfficiencyMetricSource extends ComposedMetricSourceBase<Res
             const result = queryResult.results[0].samples[0];
             return {
                 timestamp: result.timestamp,
-                value: { efficiency: result.value },
+                value: { efficiency: result.value * 100 },
             };
         }
     }

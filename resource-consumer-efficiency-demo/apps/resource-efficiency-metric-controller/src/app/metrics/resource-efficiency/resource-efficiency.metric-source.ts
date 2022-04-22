@@ -38,7 +38,7 @@ export class ResourceEfficiencyMetricSource extends ComposedMetricSourceBase<Res
     private async getResourceEfficiency(): Promise<Sample<ResourceEfficiency>> {
         // Average total CPU usage in a deployment = average of the total CPU usage of all its pods.
         const avgTotalPodCpuUsageQ = this.metricsSource.getTimeSeriesSource()
-            .select<number>('container', 'cpu_usage_seconds_total', TimeRange.fromDuration(Duration.fromSeconds(30)))
+            .select<number>('container', 'cpu_usage_seconds_total', TimeRange.fromDuration(Duration.fromSeconds(40)))
             .filterOnLabel(this.createNamespaceFilter())
             .filterOnLabel(this.createPodFilter())
             .filterOnLabel(this.createResourceUsageContainerFilter())

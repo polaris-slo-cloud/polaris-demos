@@ -1,26 +1,29 @@
-import { HorizontalElasticityStrategyKind } from '@polaris-sloc/common-mappings';
 import { ApiObjectMetadata, SloTarget } from '@polaris-sloc/core';
 import {
     ResourceEfficiencySloMapping,
     ResourceEfficiencySloMappingSpec,
 } from '@polaris-sloc/efficiency-mappings';
+import { MyHorizontalElasticityStrategyKind } from '@polaris-sloc/custom-elasticity-strategies';
 
 export default new ResourceEfficiencySloMapping({
     metadata: new ApiObjectMetadata({
-        namespace: 'ToDo', // ToDo: Enter the target namespace.
+        namespace: 'resource-consumer-demo',
         name: 'resource-efficiency-demo',
     }),
     spec: new ResourceEfficiencySloMappingSpec({
         targetRef: new SloTarget({
-            // ToDo: Configure the target.
-            group: 'ToDo',
-            version: 'ToDo',
-            kind: 'ToDo',
-            name: 'ToDo',
+            group: 'apps',
+            version: 'v1',
+            kind: 'Deployment',
+            name: 'resource-consumer',
         }),
-        elasticityStrategy: new HorizontalElasticityStrategyKind(), // ToDo: Change the elasticity strategy, if needed.
+        elasticityStrategy: new MyHorizontalElasticityStrategyKind(),
         sloConfig: {
-            // ToDo: Configure the SLO.
+            targetEfficiency: 80,
         },
+        stabilizationWindow: {
+            scaleUpSeconds: 30,
+            scaleDownSeconds: 30,
+        }
     }),
 });

@@ -37,6 +37,30 @@ Then, follow these steps for deploying the resource-consumer resource efficiency
 
     This pod contains the script `/load-gen/generate-load.sh`, which we use to make resource consumption requests to all resource-consumer pods (with the service, we would only hit one pod for every request due to load balancing).
 
+4. Check if the `resource_efficiency_prom` metric is working:
+
+    ```sh
+    # Terminal 1
+    kubectl proxy
+
+    # Terminal 2
+    curl http://<KUBERNETES_ADDR>/apis/custom.metrics.k8s.io/v1beta1/namespaces/resource-consumer-demo/pods/*/resource_efficiency_prom
+    ```
+
+5. Deploy the Polaris CRDs and controllers:
+
+    ```sh
+    cd .. # We need to be in the root folder of the workspace.
+
+    # Apply the CRDs
+    kubectl apply -f ./libs/custom-elasticity-strategies/crds
+    kubectl apply -f ./libs/efficiency-mappings/crds
+
+    # Deploy the controllers
+    polaris-cli deploy my-horizontal-elasticity-strategy-controller
+    polaris-cli deploy resource-efficiency-metric-controller
+    polaris-cli deploy resource-efficiency-slo-controller
+    ```
 
 This is the resource efficiency query needed for Prometheus:
 ```

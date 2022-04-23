@@ -62,8 +62,9 @@ Then, follow these steps for deploying the resource-consumer resource efficiency
     polaris-cli deploy resource-efficiency-slo-controller
     ```
 
-This is the resource efficiency query needed for Prometheus:
+This is the resource efficiency query that can be used with the Prometheus UI:
 ```
+# Example query for pods of the "resource-consumer" deployment in the "resource-consumer-demo" namespace.
 (
   (
     # Average total CPU usage across all pods of the deployment.
@@ -79,7 +80,9 @@ This is the resource efficiency query needed for Prometheus:
       ) by (pod)
     )
     /
+    # Sum of the CPU limits of all containers in the pod.
     sum(
+      # Average CPU limit for a specific container across all pods (reduces the series to an instant vector, because the limit for a container is the same in every pod).
       avg(
         kube_pod_container_resource_limits{
           namespace="resource-consumer-demo", pod=~"resource-consumer-.*", container_name!="kube-state-metrics", resource="cpu"
@@ -105,3 +108,42 @@ This is the resource efficiency query needed for Prometheus:
   ) / 2
 ) * 100
 ```
+
+
+The resource efficiency query used for the prometheus-adapter is slightly different, because it should only return data for a single pod and it must maintain the `pod` label:
+```
+# Example query for pods "resource-consumer-.*" in the "resource-consumer-demo" namespace.
+(
+  (
+    # Sum of the CPU usage of all containers in a pod.
+    sum(
+      # CPU Usage of the single containers in the pod.
+      rate(
+        container_cpu_usage_seconds_total{
+          namespace="resource-consumer-demo", pod=~"resource-consumer-.*", container!=""
+        }[40s]
+      )
+    ) by (pod)
+    /
+    # Sum of the CPU limits of all containers in the pod.
+    sum(
+      kube_pod_container_resource_limits{
+        namespace="resource-consumer-demo", pod=~"resource-consumer-.*", container_name!="kube-state-metrics", resource="cpu"
+      }
+    ) by (pod)
+    +
+    sum(
+      container_memory_usage_bytes{
+        namespace="resource-consumer-demo", pod=~"resource-consumer-.*", container!=""
+      }
+    ) by (pod)
+    /
+    sum(
+      kube_pod_container_resource_limits{
+        namespace="resource-consumer-demo", pod=~"resource-consumer-.*", container_name!="kube-state-metrics", resource="memory"
+      }
+    ) by (pod)
+  ) / 2
+) * 100
+```
+

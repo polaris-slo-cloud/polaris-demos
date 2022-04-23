@@ -90,51 +90,44 @@ rules:
       resources:
         # The resource_efficiency_prom metric should be available for pods, which are identified by the `pod` label on each series.
         overrides:
+          namespace: { resource: namespace }
           pod: { resource: pod }
       name:
         # We do not use anything from the discovery metric as name. Instead, we provide our own name: resource_efficiency_prom.
         matches: "^(.*)$"
         as: resource_efficiency_prom
-      # The query to calculate the resource efficiency (see apps/resource-efficiency-metric-controller/src/app/metrics/resource-efficiency/resource-efficiency.metric-source.ts for details).
+      # The query to calculate the resource efficiency for a single pod.
       metricsQuery: |
         (
           (
-            # Average total CPU usage across all pods of the deployment. ToDo: not sure if we need this, because prometheus-adapter will probably query each pod individually, but it shouldn't hurt.
-            avg(
-              # Sum of the CPU usage of all containers in a pod.
-              sum(
-                # CPU Usage of the single containers in the pod.
-                rate(
-                  <<.Series>>{
-                    <<.LabelMatchers>>, container!=""
-                  }[40s]
-                )
-              ) by (pod)
-            )
-            /
+            # Sum of the CPU usage of all containers in a pod.
             sum(
-              avg(
-                kube_pod_container_resource_limits{
-                  <<.LabelMatchers>>, container_name!="kube-state-metrics", resource="cpu"
-                }
-              ) by (container)
-            )
-            +
-            avg(
-              sum(
-                container_memory_usage_bytes{
+              # CPU Usage of the single containers in the pod.
+              rate(
+                <<.Series>>{
                   <<.LabelMatchers>>, container!=""
-                }
-              ) by (pod)
-            )
+                }[40s]
+              )
+            ) by (<<.GroupBy>>)
+            /
+            # Sum of the CPU limits of all containers in the pod.
+            sum(
+              kube_pod_container_resource_limits{
+                <<.LabelMatchers>>, container_name!="kube-state-metrics", resource="cpu"
+              }
+            ) by (<<.GroupBy>>)
+            +
+            sum(
+              container_memory_usage_bytes{
+                <<.LabelMatchers>>, container!=""
+              }
+            ) by (<<.GroupBy>>)
             /
             sum(
-              avg(
-                kube_pod_container_resource_limits{
-                  <<.LabelMatchers>>, container_name!="kube-state-metrics", resource="memory"
-                }
-              ) by (container)
-            )
+              kube_pod_container_resource_limits{
+                <<.LabelMatchers>>, container_name!="kube-state-metrics", resource="memory"
+              }
+            ) by (<<.GroupBy>>)
           ) / 2
         ) * 100
 # - seriesQuery: '{__name__=~"^some_metric_count$"}'

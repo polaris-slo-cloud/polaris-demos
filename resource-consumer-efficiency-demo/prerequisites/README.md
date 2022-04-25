@@ -62,6 +62,9 @@ Then, follow these steps for deploying the resource-consumer resource efficiency
     polaris-cli deploy resource-efficiency-slo-controller
     ```
 
+6. Navigate to your Grafana instance in your browser and import the resource-efficiency dashboard from [./5-resource-efficiency-grafana-dashboard.json](./5-resource-efficiency-grafana-dashboard.json).
+
+
 This is the resource efficiency query that can be used with the Prometheus UI:
 ```
 # Example query for pods of the "resource-consumer" deployment in the "resource-consumer-demo" namespace.

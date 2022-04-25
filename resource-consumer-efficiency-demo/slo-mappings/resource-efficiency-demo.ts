@@ -24,6 +24,10 @@ export default new ResourceEfficiencySloMapping({
         stabilizationWindow: {
             scaleUpSeconds: 30,
             scaleDownSeconds: 30,
+        },
+        staticElasticityStrategyConfig: {
+            minReplicas: 1,
+            maxReplicas: 10,
         }
     }),
 });

@@ -44,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/cost-eff-controller"],
       "options": {
-        "jestConfig": "apps/cost-eff-controller/jest.config.js",
+        "jestConfig": "apps/cost-eff-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },

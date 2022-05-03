@@ -44,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/predicted-efficiency"],
       "options": {
-        "jestConfig": "apps/predicted-efficiency/jest.config.js",
+        "jestConfig": "apps/predicted-efficiency/jest.config.ts",
         "passWithNoTests": true
       }
     },

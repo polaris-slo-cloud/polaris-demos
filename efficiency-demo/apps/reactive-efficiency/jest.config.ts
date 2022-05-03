@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'eff-controller',
-  preset: '../../jest.preset.js',
+  displayName: 'reactive-efficiency',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,6 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/eff-controller',
+  coverageDirectory: '../../coverage/apps/reactive-efficiency',
+  preset: '../../jest.preset.ts',
 };

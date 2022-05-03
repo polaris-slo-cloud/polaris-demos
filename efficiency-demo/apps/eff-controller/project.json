@@ -44,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/eff-controller"],
       "options": {
-        "jestConfig": "apps/eff-controller/jest.config.js",
+        "jestConfig": "apps/eff-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },

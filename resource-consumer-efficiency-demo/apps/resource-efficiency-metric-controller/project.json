@@ -46,7 +46,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/resource-efficiency-metric-controller"],
       "options": {
-        "jestConfig": "apps/resource-efficiency-metric-controller/jest.config.js",
+        "jestConfig": "apps/resource-efficiency-metric-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },

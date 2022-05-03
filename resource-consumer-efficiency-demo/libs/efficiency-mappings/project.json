@@ -13,7 +13,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/efficiency-mappings"],
       "options": {
-        "jestConfig": "libs/efficiency-mappings/jest.config.js",
+        "jestConfig": "libs/efficiency-mappings/jest.config.ts",
         "passWithNoTests": true
       }
     },

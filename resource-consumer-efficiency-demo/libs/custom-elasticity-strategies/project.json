@@ -13,7 +13,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/custom-elasticity-strategies"],
       "options": {
-        "jestConfig": "libs/custom-elasticity-strategies/jest.config.js",
+        "jestConfig": "libs/custom-elasticity-strategies/jest.config.ts",
         "passWithNoTests": true
       }
     },

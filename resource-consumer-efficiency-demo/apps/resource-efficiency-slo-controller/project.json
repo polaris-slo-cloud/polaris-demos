@@ -44,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/resource-efficiency-slo-controller"],
       "options": {
-        "jestConfig": "apps/resource-efficiency-slo-controller/jest.config.js",
+        "jestConfig": "apps/resource-efficiency-slo-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },

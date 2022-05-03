@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'mystrategies',
-  preset: '../../jest.preset.js',
+  displayName: 'myslos',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/mystrategies',
+  coverageDirectory: '../../coverage/libs/myslos',
+  preset: '../../jest.preset.ts',
 };

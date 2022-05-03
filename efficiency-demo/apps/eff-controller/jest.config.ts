@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'predicted-efficiency',
-  preset: '../../jest.preset.js',
+  displayName: 'eff-controller',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,6 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/predicted-efficiency',
+  coverageDirectory: '../../coverage/apps/eff-controller',
+  preset: '../../jest.preset.ts',
 };

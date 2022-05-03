@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'reactive-efficiency',
-  preset: '../../jest.preset.js',
+  displayName: 'my-horizontal-elasticity-strategy-controller',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,7 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/reactive-efficiency',
+  coverageDirectory:
+    '../../coverage/apps/my-horizontal-elasticity-strategy-controller',
+  preset: '../../jest.preset.ts',
 };

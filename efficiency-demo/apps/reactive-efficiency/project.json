@@ -44,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/reactive-efficiency"],
       "options": {
-        "jestConfig": "apps/reactive-efficiency/jest.config.js",
+        "jestConfig": "apps/reactive-efficiency/jest.config.ts",
         "passWithNoTests": true
       }
     },

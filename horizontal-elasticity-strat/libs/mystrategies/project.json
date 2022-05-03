@@ -14,7 +14,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/mystrategies"],
       "options": {
-        "jestConfig": "libs/mystrategies/jest.config.js",
+        "jestConfig": "libs/mystrategies/jest.config.ts",
         "passWithNoTests": true
       }
     },

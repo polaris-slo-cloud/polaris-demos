@@ -48,7 +48,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/my-horizontal-elasticity-strategy-controller"],
       "options": {
-        "jestConfig": "apps/my-horizontal-elasticity-strategy-controller/jest.config.js",
+        "jestConfig": "apps/my-horizontal-elasticity-strategy-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },

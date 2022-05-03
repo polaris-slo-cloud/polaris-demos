@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'my-horizontal-elasticity-strategy-controller',
-  preset: '../../jest.preset.js',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -13,4 +13,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
     '../../coverage/apps/my-horizontal-elasticity-strategy-controller',
+  preset: '../../jest.preset.ts',
 };

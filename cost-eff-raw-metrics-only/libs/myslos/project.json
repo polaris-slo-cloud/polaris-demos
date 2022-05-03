@@ -14,7 +14,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/myslos"],
       "options": {
-        "jestConfig": "libs/myslos/jest.config.js",
+        "jestConfig": "libs/myslos/jest.config.ts",
         "passWithNoTests": true
       }
     },

@@ -52,7 +52,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "docker build -f ./apps/eff-controller/Dockerfile --build-arg POLARIS_APP_TYPE=slo --build-arg POLARIS_APP_NAME=eff-controller -t polarissloc/eff-controller:latest ."
+          "docker build -f ./apps/eff-controller/Dockerfile --build-arg POLARIS_APP_TYPE=slo --build-arg POLARIS_APP_NAME=eff-controller -t polarissloc/eff-controller:1.4 ."
         ],
         "parallel": false
       }

@@ -25,7 +25,7 @@ export interface Efficiency {
 export interface EfficiencyParams extends ComposedMetricParams {}
 
 /**
- * Represents the type of a generic cost efficiency metric.
+ * Represents the type of a generic efficiency metric.
  */
 export class EfficiencyMetric extends ComposedMetricType<
   Efficiency,

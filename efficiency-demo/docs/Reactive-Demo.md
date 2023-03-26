@@ -6,56 +6,132 @@ This document lists all commands to generate the reactive approach of scaling ba
 
 To deploy the workload for this demo (i.e., a metric exporter, based on a selection of data from the [Google Cluster Data 2011](https://research.google/tools/datasets/cluster-workload-traces/), and a dummy workload (pause container) that we can scale using the metrics from the former), download the files inside the [../deployment](../deployment) folder or clone this repository.
 Then apply them using `kubectl`:
-```bash
-kubectl apply -f ./deployment
-```
+    ```sh
+    kubectl apply -f ./deployment
+    ```
 
 ## 2. Create a Workspace 
-```bash
-npm install -g @polaris-sloc/cli
-polaris-cli init demo
-cd demo 
-```
+
+Install the Polaris CLI and then, create a new empty [Nx](https://nx.dev) workspace and navigate into it:
+
+    ```sh
+    npm install -g @polaris-sloc/cli
+    polaris-cli init demo
+    cd demo 
+    ```
 
 ## 3. Create the Efficiency Metric Controller
 
-```bash
-polaris-cli g composed-metric-type efficiency --project=myslos --createLibProject=true --importPath=@my-org/my-slos
-```
-
-Open Editor, and
-go into `libs/myslos/src/lib/metrics/efficiency-metric.prm.ts` and fill out Efficiency interface
-
-```bash
-polaris-cli g composed-metric-controller reactive-efficiency --compMetricType=Efficiency --compMetricTypePkg=@my-org/my-slos
-```
-
-Fill out the `efficiency.metric-source.ts` file.
-
-Then, generate and apply the CRDs:
-
-```bash
-polaris-cli gen-crds myslos
-kubectl apply -f ./libs/myslos/crds
-```
-
-Afterwards, you can build & push the Docker container and finally deploy the components to your Kubernetes instance. 
-```bash
-polaris-cli docker-build reactive-efficiency
-docker push <image-name>
-polaris-cli deploy reactive-efficiency
-kubectl get deployments.apps -n polaris
-```
-
-## 4. Horizontal Elasticity Strategy Controller
-
-1. Generate an elasticity strategy type for the horizontal elasticity strategy.
-An elasticity strategy type needs to be contained within a publishable Node.JS library project (i.e., an Nx project that builds a publishable npm package).
+1. Generate a Composed Metric type that we will use to describe and configure our Efficiency metric.
+A Composed Metric type type needs to be contained within a publishable Node.JS library project (i.e., an Nx project that builds a publishable npm package).
 The name of the project is specified with the `--project` parameter.
 If you don't have any library project in the workspace yet (as is the case in this demo), Polaris CLI can create one.
 To this end, add the `--createLibProject=true` parameter and specify the import path that people using the library will use for importing it using the `--importPath` parameter.
 
-    ```bash
+    ```sh
+    # Generate the Efficiency composed metric type in the library project myslos, which is publishable as @my-org/my-slos
+    # This generates the project libs/myslos
+    polaris-cli g composed-metric-type efficiency --project=myslos --createLibProject=true --importPath=@my-org/my-slos
+    ```
+
+
+1. Open the file `libs/myslos/src/lib/metrics/efficiency-metric.prm.ts` (`.prm` stands for Polaris Resource Model).
+It contains a list of ToDos and three types:
+
+    * The `Efficiency` interface is used to represent a single value of the Efficiency metric. Fill it out, as follows:
+
+        ```TypeScript
+        export interface Efficiency {
+
+            /**
+            * The current efficiency in the range between 0 and 100.
+            */
+            efficiency: number;
+
+        }
+        ```
+    
+    * The `EfficiencyParams` interface can be used to define custom configuration parameters that can be passed from the SLO controller to the composed metric. For this demo, we do not need any. So, we leave this interface empty.
+
+    * The `EfficiencyMetric` class represents the Composed Metric type used by the Polaris Runtime. The `metricTypeName` property stores the unique name of this Composed Metric type to identify it in the Polaris ecosystem and to create a Kubernetes CRD. We could use a custom API group here, but for this demo we do not need to modify anything here.
+
+    * The `EfficiencyMetricMapping` class is the API object that can be transformed, serialized, and sent to the orchestrator. It can be left as is.
+
+
+1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our Composed Metric type and associate it with the `EfficiencyMetricMapping` class in [transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
+Since we generated a new library project, this step has already been done by the Polaris CLI.
+If we had added the  Composed Metric type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
+
+    ```TypeScript
+    export function initPolarisLib(polarisRuntime: PolarisRuntime): void {
+        ...
+        polarisRuntime.transformer.registerObjectKind(new EfficiencyMetricMapping().objectKind, EfficiencyMetricMapping);
+    }
+    ```
+
+
+1. Next we generate the Kubernetes Custom Resource Definition (CRD) for our Custom Metric type and register it with Kubernetes:
+
+    ```sh
+    # Generate the CRDs of the project `myslos` in the folder `libs/my-slos/crds` and apply them.
+    polaris-cli gen-crds myslos
+    kubectl apply -f ./libs/myslos/crds
+    ```
+
+
+1. To generate a Custom Metric controller, we need to tell the Polaris CLI which Custom Metric type is going to be handled by the controller.
+This is done using the `--compMetricTypePkg` and the `--compMetricType` arguments.
+If the SLO mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO mapping type is available locally, otherwise, it installs the respective npm package.
+Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and `@polaris-sloc/prometheus` packages to enable the controller for use in Kubernetes and to read metrics from Prometheus.
+
+    ```sh
+    polaris-cli g composed-metric-controller reactive-efficiency --compMetricType=Efficiency --compMetricTypePkg=@my-org/my-slos
+    ```
+
+1. The generated Composed Metric controller project includes the following:
+    * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, configuring the Prometheus library as a metrics query backend, initializing the `@my-org/my-slos` library, registering the `EfficiencyMetricMapping` with the composed metrics manager and starting the manager.
+    * `src/app/metrics/efficiency/efficiency.metric-source.ts` contains the `EfficiencyMetricSource` class that will read lower level metrics and produce the composed metric.
+    * `src/app/metrics/efficiency/efficiency.metric-source.factory.ts` contains the factory that produces the `EfficiencyMetricSource`. This need not be modified.
+    * `Dockerfile` for building a container image of the controller
+    * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
+
+
+1. Next, we implement the `EfficiencyMetricSource` in `apps/reactive-efficiency/src/app/metrics/efficiency/efficiency.metric-source.ts` as shown in the final [file](../apps/reactive-efficiency/src/app/metrics/efficiency/efficiency.metric-source.ts).
+
+
+1. Since Polaris CLI has generated a Dockerfile for us, we can easily build and push the container image for our SLO controller.
+The tags for the image can be adjusted in the build command in `apps/reactive-efficiency/project.json` `targets.docker-build.options.commands` (the user friendliness of this step will be improved in the future).
+When changing the tag here, you also need to change the image name in `apps/reactive-efficiency/manifests/kubernetes/2-slo-controller.yaml`
+
+    ```JSON
+    "commands": [
+        "docker build ... -t polarissloc/reactive-efficiency:latest ."
+    ],
+    ```
+
+    ```sh
+    # Build SLO controller container image
+    polaris-cli docker-build reactive-efficiency
+
+    # Push the container image to Dockerhub
+    docker push polarissloc/reactive-efficiency:latest
+
+    # Deploy the controller
+    polaris-cli deploy reactive-efficiency
+
+    # Verify that the components are running
+    kubectl get deployments.apps -n polaris
+    ```
+
+
+## 4. Horizontal Elasticity Strategy Controller
+
+1. Generate an Elasticity Strategy type for the horizontal elasticity strategy.
+Like a Composed Metric type, an Elasticity Strategy type needs to be contained within a publishable Node.JS library project, whose name can be specified with the `--project` parameter.
+We will create a new project for this Elasticity Strategy type.
+To this end, add the `--createLibProject=true` parameter and specify the import path that people using the library will use for importing it using the `--importPath` parameter.
+
+    ```sh
     # Generate the MyHorizontalElasticityStrategy type in the library project mystrategies, which is publishable as @my-org/my-strategies
     # This generates the project libs/mystrategies
     polaris-cli g elasticity-strategy my-horizontal-elasticity-strategy --project=mystrategies --createLibProject=true --importPath=@my-org/my-strategies
@@ -126,7 +202,7 @@ This is done using the `--eStratTypePkg` and the `--eStratType` arguments.
 If the elasticity strategy type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the elasticity strategy type is available locally, otherwise, it installs the respective npm package.
 Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` package to enable the controller for use in Kubernetes.
 
-    ```bash
+    ```sh
     # Generate an elasticity strategy controller project for the MyHorizontalElasticityStrategy in apps/my-horizontal-elasticity-strategy-controller
     polaris-cli g elasticity-strategy-controller my-horizontal-elasticity-strategy-controller --eStratTypePkg=@my-org/my-strategies --eStratType=MyHorizontalElasticityStrategy
     ```
@@ -302,18 +378,18 @@ When changing the tag here, you also need to change the image name in `apps/eff-
 ## 6. SLO Mapping instance
 
 Generate a SLO Mapping instance:
-```bash
+```sh
 polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping --sloMappingTypePkg=@my-org/my-slos
 ```
 
 Fill out SLO Mapping `targetEfficiency`, and serialize and apply the demo:
 
-```bash
+```sh
 polaris-cli serialize demo-efficiency | kubectl apply -f -
 ```
 
 ## 7. Grafana Dashboard
 
-```bash
+```sh
 polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
 ```

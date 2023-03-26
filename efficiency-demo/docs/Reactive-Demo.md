@@ -44,8 +44,8 @@ It contains a list of ToDos and three types:
         export interface Efficiency {
 
             /**
-            * The current efficiency in the range between 0 and 100.
-            */
+             * The current efficiency in the range between 0 and 100.
+             */
             efficiency: number;
 
         }
@@ -81,7 +81,7 @@ If we had added the  Composed Metric type to an existing project, we would need 
 
 1. To generate a Custom Metric controller, we need to tell the Polaris CLI which Custom Metric type is going to be handled by the controller.
 This is done using the `--compMetricTypePkg` and the `--compMetricType` arguments.
-If the SLO mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO mapping type is available locally, otherwise, it installs the respective npm package.
+If the SLO Mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO Mapping type is available locally, otherwise, it installs the respective npm package.
 Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` and `@polaris-sloc/prometheus` packages to enable the controller for use in Kubernetes and to read metrics from Prometheus.
 
     ```sh
@@ -154,7 +154,7 @@ It contains a list of ToDos and three types:
         maxReplicas?: number;
         ```
 
-    * `MyHorizontalElasticityStrategyKind` can be used in an SLO mapping to reference this type of elasticity strategy.
+    * `MyHorizontalElasticityStrategyKind` can be used in an SLO Mapping to reference this type of elasticity strategy.
     It also defines the input data type of the elasticity strategy (`SloCompliance`), which has to match the output data type of the SLO(s) that you want to use the elasticity strategy with, and the type of workload targets it supports (`SloTarget`).
     Depending on your use case, you may want to change the output data type of the workload target type -- for the demo, we will leave them as they are.
     Since this class defines the `ObjectKind` of the elasticity strategy, you need to adapt the `group` value that is set in the constructor to match that of your organization.
@@ -213,8 +213,8 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` pac
     * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, initializing the `@my-org/my-strategies` library, registering the `MyHorizontalElasticityStrategyKind` with the elasticity strategy manager, linking it to the newly generated `MyHorizontalElasticityStrategyController`, and starting the watch on the horizontal elasticity strategies on the orchestrator.
     * `src/app/elasticity/my-horizontal-elasticity-strategy.controller.ts` contains the `MyHorizontalElasticityStrategyController` class that will act as the microcontroller for enacting the elasticity strategy.
     A single instance of this microcontroller class is created to handle all elasticity strategy instances.
-    Note the difference to SLO controllers, where a distinct microcontroller instance is created for each SLO mapping instance.
-    This is because each SLO mapping contains a distinct configuration and the SLO with that specific configuration needs to evaluated periodically.
+    Note the difference to SLO controllers, where a distinct microcontroller instance is created for each SLO Mapping instance.
+    This is because each SLO Mapping contains a distinct configuration and the SLO with that specific configuration needs to evaluated periodically.
     Instead an elasticity strategy is only executed when an elasticity strategy type instance is created or modified and that instance contains all the information needed to execute the strategy.
     * `Dockerfile` for building a container image of the controller
     * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
@@ -243,14 +243,19 @@ However, since horizontal and vertical scaling are very common, Polaris provides
 Thus, we can delete most of the boilerplate code and extend the `HorizontalElasticityStrategyControllerBase`, which requires us to only compute the new number of replicas:
 
     ```TypeScript
-    protected computeScale(
-        elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, MyHorizontalElasticityStrategyConfig>,
-        currScale: Scale,
-    ): Promise<Scale> {
-        const newScale = new Scale(currScale);
-        const multiplier = elasticityStrategy.spec.sloOutputParams.currSloCompliancePercentage / 100;
-        newScale.spec.replicas = Math.ceil(currScale.spec.replicas * multiplier);
-        return Promise.resolve(newScale);
+    export class MyHorizontalElasticityStrategyController extends HorizontalElasticityStrategyControllerBase<
+        SloTarget,
+        MyHorizontalElasticityStrategyConfig
+    > {
+        protected computeScale(
+            elasticityStrategy: ElasticityStrategy<SloCompliance, SloTarget, MyHorizontalElasticityStrategyConfig>,
+            currScale: Scale,
+        ): Promise<Scale> {
+            const newScale = new Scale(currScale);
+            const multiplier = elasticityStrategy.spec.sloOutputParams.currSloCompliancePercentage / 100;
+            newScale.spec.replicas = Math.ceil(currScale.spec.replicas * multiplier);
+            return Promise.resolve(newScale);
+        }
     }
     ```
 
@@ -281,12 +286,12 @@ When changing the tag here, you also need to change the image name in `apps/my-h
 
 ## 5. SLO Controller
 
-1. Create an SLO mapping type for the efficiency SLO.
-Like a Composed Metric type or an Elasticity Strategy type, an SLO mapping type needs to be contained within a publishable Node.JS library project.
-We add the SLO mapping type to the existing `myslos` project.
+1. Create an SLO Mapping type for the efficiency SLO.
+Like a Composed Metric type or an Elasticity Strategy type, an SLO Mapping type needs to be contained within a publishable Node.JS library project.
+We add the SLO Mapping type to the existing `myslos` project.
 
     ```sh
-    # Generate the cost efficiency SLO mapping type in the library project myslos, which is publishable as @my-org/my-slos
+    # Generate the cost efficiency SLO Mapping type in the library project myslos, which is publishable as @my-org/my-slos
     polaris-cli g slo-mapping-type efficiency --project=myslos
     ```
 
@@ -313,7 +318,7 @@ We add the SLO mapping type to the existing `myslos` project.
         ```
 
 
-1. Since we have added the SLO mapping type to an existing project, we need to adapt the initialization function for the library library in the `libs/myslos/src/lib/init-polaris-lib.ts`file.
+1. Since we have added the SLO Mapping type to an existing project, we need to adapt the initialization function for the library library in the `libs/myslos/src/lib/init-polaris-lib.ts`file.
 We would need to register the new type with the [Polaris transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) (this will be handled automatically by the Polaris CLI in the future):
 
     ```TypeScript
@@ -323,7 +328,7 @@ We would need to register the new type with the [Polaris transformation service]
     }
     ```
 
-1. Next we generate the Kubernetes CRD for our SLO mapping type and register it with Kubernetes:
+1. Next we generate the Kubernetes CRD for our SLO Mapping type and register it with Kubernetes:
 
     ```sh
     # Generate the CRDs of the project `myslos` in the folder `libs/my-slos/crds` and apply them.
@@ -331,9 +336,9 @@ We would need to register the new type with the [Polaris transformation service]
     kubectl apply -f ./libs/myslos/crds
     ```
 
-1. To generate an SLO controller, we need to tell the Polaris CLI which SLO mapping type is going to be handled by the controller.
+1. To generate an SLO controller, we need to tell the Polaris CLI which SLO Mapping type is going to be handled by the controller.
 This is done using the `--sloMappingTypePkg` and the `--sloMappingType` arguments.
-If the SLO mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO mapping type is available locally, otherwise, it installs the respective npm package.
+If the SLO Mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO Mapping type is available locally, otherwise, it installs the respective npm package.
 
     ```sh
     # Generate an SLO controller project for the EfficiencySloMapping in apps/eff-controller
@@ -341,7 +346,7 @@ If the SLO mapping type package is configured as a [lookup path](https://www.typ
     ```
 
 1. The generated SLO controller project includes the following:
-    * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, configuring the Prometheus library as a metrics query backend, initializing the `@my-org/my-slos` library, registering the cost efficiency SLO mapping with the control loop and the watch manager, and starting the control loop.
+    * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, configuring the Prometheus library as a metrics query backend, initializing the `@my-org/my-slos` library, registering the cost efficiency SLO Mapping with the control loop and the watch manager, and starting the control loop.
     * `src/app/slo/efficiency.controller.ts` contains the `EfficiencySlo` class that will act as the microcontroller for evaluating our SLO.
     * `Dockerfile` for building a container image of the controller
     * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
@@ -375,21 +380,51 @@ When changing the tag here, you also need to change the image name in `apps/eff-
     ```
 
  
-## 6. SLO Mapping instance
+## 6. SLO Mapping Instance
 
-Generate a SLO Mapping instance:
-```sh
-polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping --sloMappingTypePkg=@my-org/my-slos
-```
+1. To apply the Efficiency SLO to the demo deployment, you need to create an instance of the SLO Mapping:
 
-Fill out SLO Mapping `targetEfficiency`, and serialize and apply the demo:
+    ```sh
+    # Create an instance of the EfficiencySloMapping.
+    # This will generate the file slo-mappings/demo-efficiency.ts
+    polaris-cli g slo-mapping demo-efficiency --sloMappingType=EfficiencySloMapping --sloMappingTypePkg=@my-org/my-slos
+    ```
 
-```sh
-polaris-cli serialize demo-efficiency | kubectl apply -f -
-```
+1. Fill out `EfficiencySloMapping` instance as shown below:
+
+    ```TypeScript
+    export default new EfficiencySloMapping({
+        metadata: new ApiObjectMetadata({
+            namespace: 'demo',
+            name: 'demo-efficiency',
+        }),
+        spec: new EfficiencySloMappingSpec({
+            targetRef: new SloTarget({
+                group: 'apps',
+                version: 'v1',
+                kind: 'Deployment',
+                name: 'pause-deployment',
+            }),
+            elasticityStrategy: new MyHorizontalElasticityStrategyKind(),
+            sloConfig: {
+                targetEfficiency: 90,
+            },
+            staticElasticityStrategyConfig: {
+                maxReplicas: 3,
+            },
+        }),
+    });
+    ```
+
+1. Serialize and apply the SLO Mapping instance:
+    ```sh
+    polaris-cli serialize demo-efficiency | tail -n +3  | kubectl apply -f -
+    ```
 
 ## 7. Grafana Dashboard
 
-```sh
-polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
-```
+To create a Grafana dashboard for the Efficiency metric, use the following command:
+
+    ```sh
+    polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
+    ```

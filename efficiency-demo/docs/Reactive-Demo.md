@@ -205,37 +205,99 @@ When changing the tag here, you also need to change the image name in `apps/my-h
 
 ## 5. SLO Controller
 
-Generate a SLO Mapping type:
+1. Create an SLO mapping type for the efficiency SLO.
+Like a Composed Metric type or an Elasticity Strategy type, an SLO mapping type needs to be contained within a publishable Node.JS library project.
+We add the SLO mapping type to the existing `myslos` project.
 
-```bash
-polaris-cli g slo-mapping-type efficiency --project=myslos
-```
+    ```sh
+    # Generate the cost efficiency SLO mapping type in the library project myslos, which is publishable as @my-org/my-slos
+    polaris-cli g slo-mapping-type efficiency --project=myslos
+    ```
 
-Fill out `SloConfig` in .ts (targetEfficiency), and generate a SLO Controller:
+1. Open the file `libs/my-slos/src/lib/slo-mappings/efficiency.slo-mapping.prm.ts` (`.prm` stands for Polaris Resource Model), which contains three types:
+    * `EfficiencySloConfig` models the configuration options of the SLO. Add the following property here:
+        ```TypeScript
+        /**
+         * The desired target efficiency in the range between 0 and 100.
+         *
+         * @minimum 0
+         * @maximum 100
+         */
+        targetEfficiency: number;
+        ```
+    * `EfficiencySloMappingSpec` is the type that brings together the SLO's configuration type, its output data type (`SloOutput`), and the type of workload targets it supports (`SloTarget`).
+    Depending on your use case, you may want to change the output data type of the workload target type -- for the demo, we will leave them as they are.
+    * `EfficiencySloMapping` is the API object that can be transformed, serialized, and sent to the orchestrator. Here, the `objectKind.group` value that is set in the constructor needs to be changed to match that of your organization. In this demo, we leave it at the generated value of `'slo.polaris-slo-cloud.github.io'`.
+        ```TypeScript
+        constructor(initData?: SloMappingInitData<EfficiencySloMapping>) {
+            super(initData);
+            this.objectKind = new ObjectKind({
+                group: 'slo.polaris-slo-cloud.github.io',
+            ...
+        ```
 
-```bash
-polaris-cli g slo-controller eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=EfficiencySloMapping
-```
 
-Fill out `efficiency.slo.ts` controller, and generate the CRDS:
+1. Since we have added the SLO mapping type to an existing project, we need to adapt the initialization function for the library library in the `libs/myslos/src/lib/init-polaris-lib.ts`file.
+We would need to register the new type with the [Polaris transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) (this will be handled automatically by the Polaris CLI in the future):
 
-```bash
-polaris-cli gen-crds myslos
-kubectl apply -f ./libs/myslos/crds
-```
+    ```TypeScript
+    export function initPolarisLib(polarisRuntime: PolarisRuntime): void {
+        ...
+        polarisRuntime.transformer.registerObjectKind(new EfficiencySloMapping().objectKind, EfficiencySloMapping);
+    }
+    ```
 
-Build, push and deploy the **SLO Controller**:
+1. Next we generate the Kubernetes CRD for our SLO mapping type and register it with Kubernetes:
 
-```bash
-polaris-cli docker-build eff-controller
-docker push <image-name>
-polaris-cli deploy eff-controller
-```
+    ```sh
+    # Generate the CRDs of the project `myslos` in the folder `libs/my-slos/crds` and apply them.
+    polaris-cli gen-crds myslos
+    kubectl apply -f ./libs/myslos/crds
+    ```
 
-Verify that the components are running:
-```
-kubectl get deployments.apps -n polaris
-```
+1. To generate an SLO controller, we need to tell the Polaris CLI which SLO mapping type is going to be handled by the controller.
+This is done using the `--sloMappingTypePkg` and the `--sloMappingType` arguments.
+If the SLO mapping type package is configured as a [lookup path](https://www.typescriptlang.org/tsconfig#paths) in the workspace's `tsconfig.base.json`, Polaris CLI knows that the SLO mapping type is available locally, otherwise, it installs the respective npm package.
+
+    ```sh
+    # Generate an SLO controller project for the EfficiencySloMapping in apps/eff-controller
+    polaris-cli g slo-controller eff-controller --sloMappingTypePkg=@my-org/my-slos --sloMappingType=EfficiencySloMapping
+    ```
+
+1. The generated SLO controller project includes the following:
+    * `src/main.ts` bootstraps the controller application by initializing the Polaris runtime with the Kubernetes library, configuring the Prometheus library as a metrics query backend, initializing the `@my-org/my-slos` library, registering the cost efficiency SLO mapping with the control loop and the watch manager, and starting the control loop.
+    * `src/app/slo/efficiency.controller.ts` contains the `EfficiencySlo` class that will act as the microcontroller for evaluating our SLO.
+    * `Dockerfile` for building a container image of the controller
+    * `manifests/kubernetes` contains configuration YAML files for setting up and deploying the controller on Kubernetes.
+
+
+1. Next, we implement the `EfficiencySlo` in `apps/eff-controller/src/app/slo/efficiency.slo.ts` as shown in the final [file](../apps/eff-controller/src/app/slo/efficiency.controller.ts).
+
+
+1. Since Polaris CLI has generated a Dockerfile for us, we can easily build and push the container image for our SLO controller.
+The tags for the image can be adjusted in the build command in `apps/eff-controller/project.json` `targets.docker-build.options.commands` (the user friendliness of this step will be improved in the future).
+When changing the tag here, you also need to change the image name in `apps/eff-controller/manifests/kubernetes/2-slo-controller.yaml`
+
+    ```JSON
+    "commands": [
+        "docker build ... -t polarissloc/eff-controller:latest ."
+    ],
+    ```
+
+    ```sh
+    # Build SLO controller container image
+    polaris-cli docker-build eff-controller
+
+    # Push the container image to Dockerhub
+    docker push polarissloc/eff-controller:latest
+
+    # Deploy the controller
+    polaris-cli deploy eff-controller
+
+    # Verify that the components are running
+    kubectl get deployments.apps -n polaris
+    ```
+
  
 ## 6. SLO Mapping instance
 

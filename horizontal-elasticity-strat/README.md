@@ -93,7 +93,7 @@ It contains a list of ToDos and three types:
 
 1. The file `libs/mystrategies/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our elasticity strategy and associate it with the elasticity strategy class in [transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
 Since we generated a new library project, this step has already been done by the Polaris CLI.
-If we had added the SLO mapping type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
+If we had added the Elasticity Strategy type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
 
     ```TypeScript
     export function initPolarisLib(polarisRuntime: PolarisRuntime): void {

@@ -6,19 +6,20 @@ This document lists all commands to generate the reactive approach of scaling ba
 
 To deploy the workload for this demo (i.e., a metric exporter, based on a selection of data from the [Google Cluster Data 2011](https://research.google/tools/datasets/cluster-workload-traces/), and a dummy workload (pause container) that we can scale using the metrics from the former), download the files inside the [../deployment](../deployment) folder or clone this repository.
 Then apply them using `kubectl`:
-    ```sh
-    kubectl apply -f ./deployment
-    ```
+
+  ```sh
+  kubectl apply -f ./deployment
+  ```
 
 ## 2. Create a Workspace 
 
 Install the Polaris CLI and then, create a new empty [Nx](https://nx.dev) workspace and navigate into it:
 
-    ```sh
-    npm install -g @polaris-sloc/cli
-    polaris-cli init demo
-    cd demo 
-    ```
+  ```sh
+  npm install -g @polaris-sloc/cli
+  polaris-cli init demo
+  cd demo 
+  ```
 
 ## 3. Create the Efficiency Metric Controller
 
@@ -425,6 +426,6 @@ When changing the tag here, you also need to change the image name in `apps/eff-
 
 To create a Grafana dashboard for the Efficiency metric, use the following command:
 
-    ```sh
-    polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
-    ```
+  ```sh
+  polaris-cli g metrics-dashboard efficiency --compMetricTypePkg=@my-org/my-slos --compMetricType=Efficiency --namespace=demo --grafanaUrl=<grafana URL>
+  ```

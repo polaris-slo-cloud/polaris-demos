@@ -222,7 +222,7 @@ When changing the tag here, you also need to change the image name in `apps/cost
     polaris-cli serialize demo-mapping
 
     # Apply the SLO mapping to your cluster
-    polaris-cli serialize demo-mapping | kubectl apply -f -
+    polaris-cli serialize demo-mapping | tail -n +3 | kubectl apply -f -
 
     # Watch the logs of the SLO controller to see what is happening
     kubectl logs -f -n polaris <name of the cost-eff-controller pod>

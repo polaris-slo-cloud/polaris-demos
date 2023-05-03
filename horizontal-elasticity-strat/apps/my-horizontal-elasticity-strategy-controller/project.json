@@ -1,10 +1,11 @@
 {
+  "name": "my-horizontal-elasticity-strategy-controller",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/my-horizontal-elasticity-strategy-controller/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/my-horizontal-elasticity-strategy-controller",
@@ -32,13 +33,13 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nx/node:node",
       "options": {
         "buildTarget": "my-horizontal-elasticity-strategy-controller:build"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
@@ -47,8 +48,10 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/my-horizontal-elasticity-strategy-controller"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/my-horizontal-elasticity-strategy-controller"
+      ],
       "options": {
         "jestConfig": "apps/my-horizontal-elasticity-strategy-controller/jest.config.ts",
         "passWithNoTests": true

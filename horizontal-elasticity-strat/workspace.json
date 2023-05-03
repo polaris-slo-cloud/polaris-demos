@@ -3,5 +3,6 @@
   "projects": {
     "my-horizontal-elasticity-strategy-controller": "apps/my-horizontal-elasticity-strategy-controller",
     "mystrategies": "libs/mystrategies"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

@@ -10,7 +10,7 @@ To recreate it yourself, please follow the tutorial below.
 Please make sure that you have installed the following:
 
 * Node.JS 14 or higher
-* A Kubernetes cluster with Prometheus ans KubeCost installed
+* A Kubernetes cluster with Prometheus and KubeCost installed
 * kubectl (and configure the Kubernetes cluster you want to use for testing as your current context)
 * [Polaris CLI](https://www.npmjs.com/package/@polaris-sloc/cli): to install Polaris CLI, run the following command:
 

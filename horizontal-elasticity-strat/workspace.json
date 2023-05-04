@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "projects": {
-    "my-horizontal-elasticity-strategy-controller": "apps/my-horizontal-elasticity-strategy-controller",
-    "mystrategies": "libs/mystrategies"
-  }
-}

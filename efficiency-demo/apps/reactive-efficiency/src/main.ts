@@ -1,7 +1,11 @@
 import { KubeConfig } from '@kubernetes/client-node';
-import { EfficiencyMetric, EfficiencyMetricMapping, initPolarisLib } from '@my-org/my-slos';
+import {
+  EfficiencyMetric,
+  EfficiencyMetricMapping,
+  initPolarisLib,
+} from '@my-org/my-slos';
 import { Logger } from '@polaris-sloc/core';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { initPolarisKubernetes } from '@polaris-sloc/kubernetes';
 import {
   PrometheusComposedMetricsCollectorManager,

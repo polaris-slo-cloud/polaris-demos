@@ -91,7 +91,7 @@ It contains a list of ToDos and three types:
     See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/4cf5876b341942441c28e404e46613b24ede2b0b).
 
 
-1. The file `libs/mystrategies/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our elasticity strategy and associate it with the elasticity strategy class in [transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
+1. The file `libs/mystrategies/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our elasticity strategy and associate it with the elasticity strategy class in [transformation service](https://polaris-slo-cloud.github.io/polaris-slo-framework/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
 Since we generated a new library project, this step has already been done by the Polaris CLI.
 If we had added the Elasticity Strategy type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
 
@@ -150,7 +150,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` pac
     The generated code creates an `OrchestratorClient` for interaction with the orchestrator and a `StabilizationWindowTracker` that can be used to ensure that we don't execute an elasticity strategy twice for the same target in a short time window, where the effect of the last operation cannot be seen yet (i.e., the stabilization window).
     All framework classes and methods have JSDoc applied, so hovering over a method name will reveal its documentation or that of the method in the superclass or interface.
 
-    An [elasticity strategy controller](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.ElasticityStrategyController.html) must implement two main methods:
+    An [elasticity strategy controller](https://polaris-slo-cloud.github.io/polaris-slo-framework/typedoc/interfaces/core_src.ElasticityStrategyController.html) must implement two main methods:
 
     * `checkIfActionNeeded()` checks if the specified elasticity strategy instance requires an execution of the strategy's actions.
     E.g., if the value of `SloCompliance` is within the toleration interval, no action is needed.
@@ -160,7 +160,7 @@ Polaris CLI automatically adds and configures the `@polaris-sloc/kubernetes` pac
 
 
 1. If we wanted to implement a never before seen elasticity strategy, we would need to implement the `execute()` method manually.
-However, since horizontal and vertical scaling are very common, Polaris provides superclasses for each of these two elasticity strategy types (see [here](https://github.com/polaris-slo-cloud/polaris/tree/master/ts/libs/core/src/lib/elasticity/public/control/base)).
+However, since horizontal and vertical scaling are very common, Polaris provides superclasses for each of these two elasticity strategy types (see [here](https://github.com/polaris-slo-cloud/polaris-slo-framework/tree/master/ts/libs/core/src/lib/elasticity/public/control/impl/base)).
 Thus, we can delete most of the boilerplate code and extend the `HorizontalElasticityStrategyControllerBase`, which requires us to only compute the new number of replicas:
 
     ```TypeScript

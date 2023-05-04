@@ -52,7 +52,7 @@ polaris-cli g predicted-metric-controller predicted-efficiency \
 ```
 
 Follow the video and fill out the `efficiency-metric-source.ts`.
-Take a look at this [documentation](https://github.com/polaris-slo-cloud/polaris/blob/master/docs/features/cli.md#predicted-metric-controller) for more details.
+Take a look at this [documentation](https://github.com/polaris-slo-cloud/polaris-slo-framework/blob/master/docs/features/cli.md#predicted-metric-controller) for more details.
 
 Afterwards, you can build and deploy the controller:
 

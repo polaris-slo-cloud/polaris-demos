@@ -1,17 +1,20 @@
 {
-  "root": "apps/predicted-efficiency",
+  "name": "predicted-efficiency",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/predicted-efficiency/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/predicted-efficiency",
         "main": "apps/predicted-efficiency/src/main.ts",
         "tsConfig": "apps/predicted-efficiency/tsconfig.app.json",
         "assets": ["apps/predicted-efficiency/src/assets"],
-        "externalDependencies": "none"
+        "externalDependencies": "none",
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
@@ -28,28 +31,28 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nx/node:node",
       "options": {
         "buildTarget": "predicted-efficiency:build"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/predicted-efficiency/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/predicted-efficiency"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/predicted-efficiency"],
       "options": {
         "jestConfig": "apps/predicted-efficiency/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "docker-build": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "docker build -f ./apps/predicted-efficiency/Dockerfile --build-arg POLARIS_APP_TYPE=slo --build-arg POLARIS_APP_NAME=predicted-efficiency -t polarissloc/predicted-efficiency-composed-metric-controller:latest .",
@@ -59,7 +62,7 @@
       }
     },
     "deploy": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "kubectl apply -f ./apps/predicted-efficiency/manifests/kubernetes"

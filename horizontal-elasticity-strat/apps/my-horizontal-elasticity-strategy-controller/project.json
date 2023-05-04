@@ -1,10 +1,11 @@
 {
-  "root": "apps/my-horizontal-elasticity-strategy-controller",
+  "name": "my-horizontal-elasticity-strategy-controller",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/my-horizontal-elasticity-strategy-controller/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/my-horizontal-elasticity-strategy-controller",
@@ -13,7 +14,9 @@
         "assets": [
           "apps/my-horizontal-elasticity-strategy-controller/src/assets"
         ],
-        "externalDependencies": "none"
+        "externalDependencies": "none",
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
@@ -30,13 +33,13 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nx/node:node",
       "options": {
         "buildTarget": "my-horizontal-elasticity-strategy-controller:build"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
@@ -45,15 +48,17 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/my-horizontal-elasticity-strategy-controller"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/my-horizontal-elasticity-strategy-controller"
+      ],
       "options": {
         "jestConfig": "apps/my-horizontal-elasticity-strategy-controller/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "docker-build": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "docker build -f ./apps/my-horizontal-elasticity-strategy-controller/Dockerfile --build-arg POLARIS_APP_TYPE=slo --build-arg POLARIS_APP_NAME=my-horizontal-elasticity-strategy-controller -t polarissloc/my-horizontal-elasticity-strategy-controller:latest ."
@@ -62,7 +67,7 @@
       }
     },
     "deploy": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "kubectl apply -f ./apps/my-horizontal-elasticity-strategy-controller/manifests/kubernetes"

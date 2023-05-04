@@ -1,10 +1,11 @@
 {
+  "name": "predicted-efficiency",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/predicted-efficiency/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/predicted-efficiency",
@@ -30,21 +31,21 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nx/node:node",
       "options": {
         "buildTarget": "predicted-efficiency:build"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/predicted-efficiency/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/predicted-efficiency"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/predicted-efficiency"],
       "options": {
         "jestConfig": "apps/predicted-efficiency/jest.config.ts",
         "passWithNoTests": true

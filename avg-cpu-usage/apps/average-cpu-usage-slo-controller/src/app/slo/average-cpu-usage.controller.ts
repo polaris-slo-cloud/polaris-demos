@@ -11,8 +11,6 @@ import {
 
 /**
  * Implements the AverageCpuUsage SLO.
- *
- * ToDo: Change SloOutput type if necessary.
  */
 export class AverageCpuUsageSlo
   implements ServiceLevelObjective<AverageCpuUsageSloConfig, SloCompliance>
@@ -28,8 +26,7 @@ export class AverageCpuUsageSlo
   ): ObservableOrPromise<void> {
     this.sloMapping = sloMapping;
     this.metricsSource = metricsSource;
-
-    // ToDo
+    return Promise.resolve();
   }
 
   evaluate(): ObservableOrPromise<SloOutput<SloCompliance>> {

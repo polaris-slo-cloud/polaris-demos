@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'eff-controller',
 
   globals: {
@@ -12,5 +13,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/eff-controller',
-  preset: '../../jest.preset.ts',
+  preset: '../../jest.preset.js',
 };

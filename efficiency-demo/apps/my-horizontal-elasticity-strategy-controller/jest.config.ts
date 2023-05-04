@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'my-horizontal-elasticity-strategy-controller',
 
   globals: {
@@ -13,5 +14,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
     '../../coverage/apps/my-horizontal-elasticity-strategy-controller',
-  preset: '../../jest.preset.ts',
+  preset: '../../jest.preset.js',
 };

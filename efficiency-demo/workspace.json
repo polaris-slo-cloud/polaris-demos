@@ -7,5 +7,6 @@
     "mystrategies": "libs/mystrategies",
     "predicted-efficiency": "apps/predicted-efficiency",
     "reactive-efficiency": "apps/reactive-efficiency"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

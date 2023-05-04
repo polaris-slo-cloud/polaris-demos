@@ -10,6 +10,10 @@
         "outDir": "libs/myslos/crds",
         "polarisTypes": ["AverageCpuUsageSloMapping"]
       }
+    },
+    "average-cpu-usage-slo-controller": {
+      "projectType": "slo-controller",
+      "tsEntryPoint": "apps/average-cpu-usage-slo-controller/src/main.ts"
     }
   }
 }

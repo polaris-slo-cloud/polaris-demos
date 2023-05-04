@@ -30,6 +30,18 @@ export class AverageCpuUsageSlo
   }
 
   evaluate(): ObservableOrPromise<SloOutput<SloCompliance>> {
+    return this.calculateSloCompliance().then(compliance => ({
+      sloMapping: this.sloMapping,
+
+      // These parameters are passed to the elasticity strategy
+      elasticityStrategyParams: {
+        currSloCompliancePercentage: compliance,
+        tolerance: this.sloMapping.spec.sloConfig.tolerance,
+      },
+    }));
+  }
+
+  private async calculateSloCompliance(): Promise<number> {
     // ToDo
   }
 }

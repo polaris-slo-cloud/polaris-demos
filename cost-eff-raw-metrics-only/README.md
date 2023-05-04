@@ -73,7 +73,7 @@ To this end, add the `--createLibProject=true` parameter and specify the import 
     See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/5d36c8c58d73d019885b28c2b1c72399e65646fd).
 
 
-1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our SLO mapping type and associate it with the SLO mapping type class in [transformation service](https://polaris-slo-cloud.github.io/polaris/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
+1. The file `libs/myslos/src/lib/init-polaris-lib.ts` contains the initialization function for your library, `initPolarisLib(polarisRuntime: PolarisRuntime)`, which has to register the object kind of our SLO mapping type and associate it with the SLO mapping type class in [transformation service](https://polaris-slo-cloud.github.io/polaris-slo-framework/typedoc/interfaces/core_src.PolarisTransformationService.html) of the Polaris runtime.
 Since we generated a new library project, this step has already been done by the Polaris CLI.
 If we had added the SLO mapping type to an existing project, we would need to perform this registration manually (this will be handled automatically by the Polaris CLI in the future):
 
@@ -147,7 +147,7 @@ When changing the tag here, you also need to change the image name in `apps/cost
     ```
 
 
-1. If your Prometheus instance is not reachable under the DNS name `prometheus-kube-prometheus-prometheus.monitoring.svc` or on port `9090` (defaults for our [testbed setup](https://github.com/polaris-slo-cloud/polaris/tree/master/testbeds/kubernetes)), you need to change the `PROMETHEUS_HOST` and/or `PROMETHEUS_PORT` environment variables in `apps/cost-eff-controller/manifests/kubernetes/2-slo-controller.yaml`.
+1. If your Prometheus instance is not reachable under the DNS name `prometheus-kube-prometheus-prometheus.monitoring.svc` or on port `9090` (defaults for our [testbed setup](https://github.com/polaris-slo-cloud/polaris-slo-framework/tree/master/testbeds/kubernetes)), you need to change the `PROMETHEUS_HOST` and/or `PROMETHEUS_PORT` environment variables in `apps/cost-eff-controller/manifests/kubernetes/2-slo-controller.yaml`.
 
     ```YAML
     env:

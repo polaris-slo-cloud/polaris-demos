@@ -16,7 +16,7 @@ Therefore, we feed Prometheus data from an additional dataset to simulate real w
 
 Our demo components are scaling based on resource data and the calculated Efficiency (`desired resources`/`used resources`).
 To this end, we simulate the resource usage of the cluster by deploying a metric exporter that feeds Prometheus a subset of the Google cluster data repeatedly.
-The specific subset of data can be found [in this file](https://github.com/polaris-slo-cloud/polaris/blob/master/python/exporters/csvreader/data/demo.csv).
+The specific subset of data can be found [in this file](https://github.com/polaris-slo-cloud/polaris-slo-framework/blob/master/python/exporters/csvreader/data/demo.csv).
 Note, that referenced data already contains the Efficiency as column.
 The exporter reads data from this csv file and returns after each scrape the next row and starts from the beginning upon reading all of it.
 
@@ -37,10 +37,10 @@ The reactive approach simply multiplies the number by 100, while the proactive a
 
 ## Polaris Load Simulator
 
-The [data-exporter application](https://github.com/polaris-slo-cloud/polaris/tree/master/python/exporters/csvreader/exporter) acts as our load simulator.
+The [data-exporter application](https://github.com/polaris-slo-cloud/polaris-slo-framework/tree/master/python/exporters/csvreader/exporter) acts as our load simulator.
 Its purpose is to read from a `csv` file and being scraped by Prometheus.
 The load simulator returns per scrape one row and starts to read the file again from the beginning.
 Therefore, the application will cycle continuously over the csv file that is contained in the container.
-At the moment, it only supports the [columns](https://github.com/polaris-slo-cloud/polaris/blob/master/python/exporters/csvreader/exporter/csvreader.py#L114) defined for our resource efficiency model and the csv file has to be included during container build time.
+At the moment, it only supports the [columns](https://github.com/polaris-slo-cloud/polaris-slo-framework/blob/master/python/exporters/csvreader/exporter/csvreader.py#L114) defined for our resource efficiency model and the csv file has to be included during container build time.
 
 During the demo application the efficiency (and its corresponding low level metrics) are repeatedly returned to Prometheus indefinitely.

@@ -7,20 +7,24 @@ import {
 
 export default new AverageCpuUsageSloMapping({
   metadata: new ApiObjectMetadata({
-    namespace: 'ToDo', // ToDo: Enter the target namespace.
-    name: 'demo-mapping',
+    // The namespace must be the same as the SloTarget
+    namespace: 'default',
+    name: 'avg-cpu-test',
   }),
   spec: new AverageCpuUsageSloMappingSpec({
+    // Identifies the workload to which to apply the SLO.
     targetRef: new SloTarget({
-      // ToDo: Configure the target.
-      group: 'ToDo',
-      version: 'ToDo',
-      kind: 'ToDo',
-      name: 'ToDo',
+      group: 'apps',
+      version: 'v1',
+      kind: 'Deployment',
+      name: 'resource-consumer',
     }),
-    elasticityStrategy: new HorizontalElasticityStrategyKind(), // ToDo: Change the elasticity strategy, if needed.
+    // We want to do horizontal scaling.
+    elasticityStrategy: new HorizontalElasticityStrategyKind(),
     sloConfig: {
-      // ToDo: Configure the SLO.
+      // We aim for 70% average CPU usage.
+      averageCpuTarget: 70,
+      tolerance: 5,
     },
   }),
 });

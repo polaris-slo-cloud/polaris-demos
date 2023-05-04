@@ -9,20 +9,27 @@ import {
   initSelf,
 } from "@polaris-sloc/core";
 
-// ToDo after code generation:
-// - Add configuration parameters to the AverageCpuUsageSloConfig interface.
-// - If the SLO does not produce SloCompliance objects as output,
-//   adapt the second generic parameter of AverageCpuUsageSloMappingSpec accordingly.
-// - If the SLO should operate on a subtype of SloTarget,
-//   adapt the third generic parameter of AverageCpuUsageSloMappingSpec accordingly.
-// - (optional) Replace the ObjectKind.group in the constructor of AverageCpuUsageSloMapping with your own.
-//   If you change the group name, ensure that you also accordingly adapt the `1-rbac.yaml` files of all
-//   SLO controllers that need to write this SloMapping CRD.
-
 /**
  * Represents the configuration options of the AverageCpuUsage SLO.
  */
-export interface AverageCpuUsageSloConfig {}
+export interface AverageCpuUsageSloConfig {
+  /**
+   * That target average CPU usage (in percent of the limit,
+   * expressed as an integer).
+   *
+   * @minimum 0
+   * @maximum 100
+   */
+  averageCpuTarget: number;
+
+  /**
+   * Specifies the tolerance within which no scaling will be performed
+   *
+   * @minimum 0
+   * @default 10
+   */
+  tolerance?: number;
+}
 
 /**
  * The spec type for the AverageCpuUsage SLO.

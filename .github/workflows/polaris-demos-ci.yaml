@@ -11,6 +11,29 @@ on:
 
 jobs:
 
+  avg-cpu-usage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./avg-cpu-usage
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    # Checkout and install dependencies.
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./avg-cpu-usage/package-lock.json
+    - run: npm ci
+    - run: npx nx build myslos
+    - run: npx nx run myslos:gen-crds
+    - run: npx nx build average-cpu-usage-slo-controller
+    - run: npx nx g @polaris-sloc/polaris-nx:serialize-slo-mapping --sloMappingTsPath=demo-mapping.ts
+
   cost-eff-composed-metrics:
     runs-on: ubuntu-latest
     defaults:
@@ -30,7 +53,9 @@ jobs:
         cache-dependency-path: ./cost-eff-composed-metrics/package-lock.json
     - run: npm ci
     - run: npx nx build myslos
+    - run: npx nx run myslos:gen-crds
     - run: npx nx build cost-eff-controller
+    - run: npx nx g @polaris-sloc/polaris-nx:serialize-slo-mapping --sloMappingTsPath=demo-mapping.ts
 
   cost-eff-raw-metrics-only:
     runs-on: ubuntu-latest
@@ -51,7 +76,9 @@ jobs:
         cache-dependency-path: ./cost-eff-raw-metrics-only/package-lock.json
     - run: npm ci
     - run: npx nx build myslos
+    - run: npx nx run myslos:gen-crds
     - run: npx nx build cost-eff-controller
+    - run: npx nx g @polaris-sloc/polaris-nx:serialize-slo-mapping --sloMappingTsPath=demo-mapping.ts
   
   efficiency-demo:
     runs-on: ubuntu-latest
@@ -73,10 +100,13 @@ jobs:
     - run: npm ci
     - run: npx nx build myslos
     - run: npx nx build mystrategies
+    - run: npx nx run myslos:gen-crds
+    - run: npx nx run mystrategies:gen-crds
     - run: npx nx build eff-controller
     - run: npx nx build my-horizontal-elasticity-strategy-controller
     - run: npx nx build predicted-efficiency
     - run: npx nx build reactive-efficiency
+    - run: npx nx g @polaris-sloc/polaris-nx:serialize-slo-mapping --sloMappingTsPath=demo-efficiency.ts
   
   horizontal-elasticity-strat:
     runs-on: ubuntu-latest
@@ -97,4 +127,5 @@ jobs:
         cache-dependency-path: ./horizontal-elasticity-strat/package-lock.json
     - run: npm ci
     - run: npx nx build mystrategies
+    - run: npx nx run mystrategies:gen-crds
     - run: npx nx build my-horizontal-elasticity-strategy-controller

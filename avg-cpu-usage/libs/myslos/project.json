@@ -1,0 +1,48 @@
+{
+  "name": "myslos",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/myslos/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/myslos",
+        "main": "libs/myslos/src/index.ts",
+        "tsConfig": "libs/myslos/tsconfig.lib.json",
+        "assets": ["libs/myslos/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs myslos {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/myslos/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/myslos/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "gen-crds": {
+      "executor": "@polaris-sloc/polaris-nx:generate-crds",
+      "options": {}
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "projects": {
+    "myslos": {
+      "projectType": "library",
+      "tsEntryPoint": "libs/myslos/src/index.ts",
+      "importPath": "@my-org/my-slos",
+      "crds": {
+        "tsConfig": "tsconfig.base.json",
+        "outDir": "libs/myslos/crds",
+        "polarisTypes": ["AverageCpuUsageSloMapping"]
+      }
+    },
+    "average-cpu-usage-slo-controller": {
+      "projectType": "slo-controller",
+      "tsEntryPoint": "apps/average-cpu-usage-slo-controller/src/main.ts"
+    }
+  }
+}

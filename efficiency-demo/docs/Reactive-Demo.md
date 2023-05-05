@@ -2,6 +2,43 @@
 
 This document lists all commands to generate the reactive approach of scaling based on efficiency shown in this [video](https://youtu.be/qScTsLGyOi8).
 
+## Prerequisites
+
+Please make sure that you have installed the following:
+
+* Node.JS 18 or higher
+* A Kubernetes cluster with Prometheus
+* kubectl (and configure the Kubernetes cluster you want to use for testing as your current context)
+* [Polaris CLI](https://www.npmjs.com/package/@polaris-sloc/cli): to install Polaris CLI, run the following command:
+
+    ```
+    npm install -g @polaris-sloc/cli
+    ```
+
+If Prometheus is not already present in the cluster, it can be deployed using the [Prometheus helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack):
+
+  ```sh
+  # Add the prometheus-community helm repo
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  helm repo update
+
+  # Create the monitoring namespace
+  kubectl create namespace monitoring
+
+  # Install the kube-prometheus stack
+  helm install prometheus prometheus-community/kube-prometheus-stack --set namespaceOverride=monitoring --set grafana.namespaceOverride=monitoring --set kube-state-metrics.namespaceOverride=monitoring --set prometheus-node-exporter.namespaceOverride=monitoring
+
+  # Wait until all new pods are running.
+  # Check this with the following command:
+  kubectl get pods -n monitoring
+
+  # See which services were created.
+  # prometheus-kube-prometheus-prometheus, which is listening on
+  # TCP port 9090 is the main Prometheus service.
+  kubectl get services -n monitoring
+  ```
+
+
 ## 1. Deploy the Workload
 
 To deploy the workload for this demo (i.e., a metric exporter, based on a selection of data from the [Google Cluster Data 2011](https://research.google/tools/datasets/cluster-workload-traces/), and a dummy workload (pause container) that we can scale using the metrics from the former), download the files inside the [../deployment](../deployment) folder or clone this repository.

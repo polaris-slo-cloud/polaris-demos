@@ -1,0 +1,100 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Polaris Demos CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  cost-eff-composed-metrics:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./cost-eff-composed-metrics
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    # Checkout and install dependencies.
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./cost-eff-composed-metrics/package-lock.json
+    - run: npm ci
+    - run: npx nx build myslos
+    - run: npx nx build cost-eff-controller
+
+  cost-eff-raw-metrics-only:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./cost-eff-raw-metrics-only
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    # Checkout and install dependencies.
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./cost-eff-raw-metrics-only/package-lock.json
+    - run: npm ci
+    - run: npx nx build myslos
+    - run: npx nx build cost-eff-controller
+  
+  efficiency-demo:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./efficiency-demo
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    # Checkout and install dependencies.
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./efficiency-demo/package-lock.json
+    - run: npm ci
+    - run: npx nx build myslos
+    - run: npx nx build mystrategies
+    - run: npx nx build eff-controller
+    - run: npx nx build my-horizontal-elasticity-strategy-controller
+    - run: npx nx build predicted-efficiency
+    - run: npx nx build reactive-efficiency
+  
+  horizontal-elasticity-strat:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./horizontal-elasticity-strat
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    # Checkout and install dependencies.
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./horizontal-elasticity-strat/package-lock.json
+    - run: npm ci
+    - run: npx nx build mystrategies
+    - run: npx nx build my-horizontal-elasticity-strategy-controller

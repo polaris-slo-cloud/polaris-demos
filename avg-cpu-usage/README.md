@@ -390,7 +390,6 @@ When changing the tag here, we also need to change the image name in [`apps/aver
       }),
     });
     ```
-    See the changes [here](https://github.com/polaris-slo-cloud/polaris-demos/commit/77d740200600fc2d8b587a70fb4293f48882818e).
 
 
 1. Apply the SLO mapping:

@@ -216,8 +216,8 @@ The following PromQL query calculates the average CPU usage in millicores across
         # CPU Usage of a single container in a pod.
         rate(
         container_cpu_usage_seconds_total{
-            namespace="default", pod=~"resource-consumer-.*", container!=""
-          }[40s]
+            namespace="default", pod=~"resource-consumer-.*"
+          }[70s]
         )
       ) by (pod)
     )
@@ -248,7 +248,7 @@ The following PromQL query calculates the average CPU usage in millicores across
         .select<number>(
           'container',
           'cpu_usage_seconds_total',
-          TimeRange.fromDuration(Duration.fromSeconds(40)),
+          TimeRange.fromDuration(Duration.fromSeconds(70)),
         )
         .filterOnLabel(
           LabelFilters.equal(
@@ -257,7 +257,6 @@ The following PromQL query calculates the average CPU usage in millicores across
           ),
         )
         .filterOnLabel(LabelFilters.regex('pod', `${sloTarget.name}-.*`))
-        .filterOnLabel(LabelFilters.notEqual('container', ''))
         .rate()
         .sumByGroup(LabelGrouping.by('pod'))
         .averageByGroup();

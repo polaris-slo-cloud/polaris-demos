@@ -53,7 +53,7 @@ export class AverageCpuUsageSlo
       .select<number>(
         'container',
         'cpu_usage_seconds_total',
-        TimeRange.fromDuration(Duration.fromSeconds(40)),
+        TimeRange.fromDuration(Duration.fromSeconds(70)),
       )
       .filterOnLabel(
         LabelFilters.equal(
@@ -62,7 +62,6 @@ export class AverageCpuUsageSlo
         ),
       )
       .filterOnLabel(LabelFilters.regex('pod', `${sloTarget.name}-.*`))
-      .filterOnLabel(LabelFilters.notEqual('container', ''))
       .rate()
       .sumByGroup(LabelGrouping.by('pod'))
       .averageByGroup();
